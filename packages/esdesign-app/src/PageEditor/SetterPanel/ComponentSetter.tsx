@@ -1,6 +1,8 @@
 import { Box, Typography } from "@mui/material"
 import { Stack } from "@mui/system"
 import { observer } from "mobx-react"
+import { isArgConfig } from "packages/esdesign-components/dist"
+import { useCallback } from "react"
 import { getPage } from "../../Provider"
 import PropEditor from "./Editors/PropEditor"
 
@@ -10,6 +12,23 @@ const ComponentSetter = () => {
     const page = getPage()
 
     const selectNode = page.selectedNode
+
+    const onChangeHandler = useCallback((name: string, namespace: string, value: any) => {
+
+        if (selectNode && (namespace in selectNode) && (name in selectNode[namespace])) {
+            const arg = selectNode[namespace][name]
+
+            if (isArgConfig(arg)) {
+                const oldValue = arg.value
+                arg.value = value
+
+                page.appRoot.event.dispatch('component.props.update', { id: selectNode.id, name, oldValue, value })
+            }
+
+        }
+
+    }, [selectNode])
+
 
     return <Stack direction='column' sx={{ gap: 1 }}>
         <Stack direction='column'>
@@ -27,7 +46,7 @@ const ComponentSetter = () => {
 
         {Object.entries(selectNode.props || {}).map(([name, config]) => {
 
-            return <PropEditor name={name} namespace='props' config={config} />
+            return <PropEditor name={name} namespace='props' config={config} onChange={onChangeHandler.bind(this, name, 'props')} />
         })}
 
 

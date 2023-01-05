@@ -1,15 +1,17 @@
 
-import { Box, Dialog, styled } from "@mui/material";
+import { Box, Dialog, styled, SxProps, Theme } from "@mui/material";
 import { Stack } from "@mui/system";
 import { types } from "packages/esdesign-components/dist";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 import AddLinkIcon from '@mui/icons-material/AddLink';
 import LinkIcon from '@mui/icons-material/Link';
 import StringEditor from "./StringEditor";
+import SelectEditor from "./SelectEditor";
+import { observer } from "mobx-react";
 
 
-const PropBindControl = (props: { sx?: any }) => {
+const PropBindControl = (props: { sx?: SxProps<Theme> }) => {
 
 
     return <Box sx={props.sx}>
@@ -24,6 +26,7 @@ interface IProps {
     name: string,
     config: types.ArgConfig,
     labelSplite?: boolean
+    onChange?(value: any): void
 }
 
 const PropItem = styled(Stack)({
@@ -33,18 +36,27 @@ const PropItem = styled(Stack)({
 
 const PropEditor = (props: IProps) => {
 
-    const { config, labelSplite, name, namespace = 'props' } = props
+    const { config, labelSplite, name, namespace = 'props', onChange } = props
 
     // TODO
     const showBindIcon = true
     const hasBound = false
+
+    const onChangeHandler = useCallback((value: any) => {
+        onChange?.(value)
+    }, [onChange])
+
+    const commonProps = {
+        name,
+        onChange: onChangeHandler
+    }
 
     const getConfigInput = useMemo(() => {
 
 
         if (config.type == 'string') {
 
-            return config.enum ? 'SelectEditor' : <StringEditor config={config} name={name} /> //<SelectEditor config={config} /> 
+            return config.enums ? <SelectEditor {...commonProps} config={config} /> : <StringEditor {...commonProps} config={config} />
         }
 
         return <></>
@@ -55,14 +67,20 @@ const PropEditor = (props: IProps) => {
 
 
 
-    return <PropItem direction='row'>
+    return <PropItem direction='row' justifyContent='center' >
         {labelSplite ? name : null}
         {getConfigInput}
 
-        {showBindIcon ? <PropBindControl /> : null}
+        {showBindIcon ? <PropBindControl sx={{
+            textAlign: 'center',
+            verticalAlign: 'center',
+            display: "flex",
+            alignItems: 'center',
+            mx: 2
+        }} /> : null}
 
     </PropItem>
 }
 
 
-export default PropEditor
+export default observer(PropEditor)

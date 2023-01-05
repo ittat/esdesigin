@@ -64,7 +64,20 @@ const Cell = (props: IProps) => {
     useEffect(() => {
         getDom()
 
+        function checkProps(event,data:{ id: string, name:string, oldValue:any, value:any}){
+
+            if(data.id == node.id){
+                updateUI()
+            }
+        }
+
         setTimeout(() => appApi.event.dispatch('appdom.update', {}))
+
+        appApi.event.addListener('component.props.update',checkProps)
+
+        return ()=>{
+            appApi.event.removeListener('component.props.update',checkProps)
+        }
     }, [])
 
 
@@ -74,7 +87,7 @@ const Cell = (props: IProps) => {
 
         {
             node.type == 'slot'
-                ? <virulDom.current >
+                ? <virulDom.current {...node.getProps()} >
                     {node ?
                         node.childSort.length ?
                             node.childSort.map(nodeId => <Cell key={nodeId} node={node.child[nodeId]} />) :

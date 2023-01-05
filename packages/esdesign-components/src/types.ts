@@ -10,13 +10,13 @@ export type IArgsTypes = 'string' | 'number' | 'object' | 'array' | 'event'
 export interface ArgStringConfig {
     type: 'string';
     value: string;
-    enum?: Array<string>;
+    enums?: Array<string>;
     required?: boolean;
 }
 export interface ArgNumberConfig {
     type: 'number';
     value: number;
-    enum?: Array<number>;
+    enums?: Array<number>;
     range?: [number, number];
     required?: boolean;
 }
@@ -208,4 +208,5 @@ export interface IFetchConfig {
 
 export interface ISoltProps {
     children?: ReactNode | undefined;
+    [k:string]:any
 }

@@ -8,10 +8,10 @@ import BlanksSoltTips from './BlanksSoltTips';
 function PageRow(props: ISoltProps) {
   console.log("PageRow length", React.Children.count(props.children))
 
+
   return (
     <Box>
-      PageRow
-      <Stack direction='row' sx={{ mx: 2, gap: 1 }}>
+      <Stack direction='row' sx={{ mx: 2, my: 1, gap: 1 }} justifyContent={props.justifyContent || undefined}>
         {props.children}
         {/* {React.Children.count(props.children) ? props.children : <BlanksSoltTips />} */}
       </Stack>
@@ -22,4 +22,10 @@ function PageRow(props: ISoltProps) {
 
 
 
-export default createEsDesginComponent(PageRow, 'slot', {});  
+export default createEsDesginComponent(PageRow, 'slot', {
+  justifyContent: {
+    type: 'string',
+    value: 'end',
+    enums: ['start', 'center', 'end']
+  }
+});  

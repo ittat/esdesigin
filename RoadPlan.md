@@ -2,16 +2,15 @@
  - ## 优先级高
 
     实现 Setter Panel 
-    - 完善props的 interface
-    - 实现 PageRow、column 的对齐 
 
  - ## 优先级低
 
     CustomComponent 的依赖引入问题
 
+    路由切换问题 
+
     
  - ## 逻辑问题
-
 
     
     CustomComponent 的依赖引入问题 
@@ -21,7 +20,7 @@
 
 # 正在排期
 
-路由切换问题 
+
 
 component List 不在左侧显示（改成在底部抽屉） 
 
@@ -38,6 +37,9 @@ Editor 插件性能问题
 
 shema 导出导入
 
+界面样式
+
+
 # 已经实现
 
 
@@ -50,4 +52,9 @@ Slot 组件适配
 添加git代码管理
 
 重新整理 settr props 标准协议问题
+
+完善props的 interface part 1
+
+实现 PageRow、column 的对齐 
+
 

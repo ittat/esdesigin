@@ -493,7 +493,7 @@ export class ComponentConfig implements IComponentConfig {
         this.type = config.type
         this.materialId = config.attrs.materialId
 
-    
+
 
 
         if (!config.id) {
@@ -552,6 +552,7 @@ export class ComponentConfig implements IComponentConfig {
             child: observable,
             childSort: observable,
             rect: observable,
+            props:observable,
             addOrMoveNode: action.bound,
             updateRect: action.bound,
             removeChildrenById: action.bound
@@ -617,9 +618,19 @@ export class ComponentConfig implements IComponentConfig {
         }
     }
 
+    // 把ArgConfig类型得props转换成key-value类型，喂给react组件
+    getProps() {
+
+       return  Object.entries(this.props || {}).reduce((sum, [name, arg], idx) => {
+            sum[name] = arg.value
+            return sum
+        }, {} as RecordStr<any>)
+
+    }
+
     static async initMaterial(config: ComponentConfig, appApi: AppConfig, materials: Record<string, IESDesiginComponent>) {
         let dom: IESDesiginComponent = materials['Error']
-        
+
         if (config.materialId.startsWith('customComponent.')) {
             const id = config.materialId.split('customComponent.')[1]
 
@@ -659,7 +670,6 @@ export class ComponentConfig implements IComponentConfig {
     static isNonSoltElement(config: ComponentConfig) {
         return config.type != 'slot'
     }
-
 
 
 

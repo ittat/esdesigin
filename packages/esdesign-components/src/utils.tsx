@@ -3,7 +3,7 @@ import { ArgConfig, DomNodeBase, DomNodeType, IArgsConfigs, IComponentConfig, IE
 export const ESDESIGN_COMPONENT = 'EsDesginComponent';
 
 
-export function createEsDesginComponent(component: React.ComponentType, type: IComponentConfig["type"], propsConfig?: RecordStr<ArgConfig>,attrsConfig?:RecordStr<ArgConfig>) {
+export function createEsDesginComponent(component: React.ComponentType, type: IComponentConfig["type"], propsConfig?: RecordStr<ArgConfig>, attrsConfig?: RecordStr<ArgConfig>) {
 
     // return {
     //     ...component,
@@ -32,4 +32,6 @@ export function createEsDesginComponent(component: React.ComponentType, type: IC
 
 }
 
-
+export function isArgConfig(obj: any): obj is ArgConfig {
+    return obj && (typeof obj == 'object') && ('type' in obj)
+}

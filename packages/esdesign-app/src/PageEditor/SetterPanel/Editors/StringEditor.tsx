@@ -1,16 +1,23 @@
 import { TextField } from "@mui/material";
 import { types } from "packages/esdesign-components/dist";
+import { useCallback } from "react";
 
-const StringEditor = (props: { config: types.ArgStringConfig,name:string }) => {
+const StringEditor = (props: { config: types.ArgStringConfig, name: string, onChange?(value?: string): void }) => {
 
-    const { value } = props.config
+    const { config, onChange } = props
+
+    const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        onChange?.(event.target.value || undefined);
+    }, [onChange]);
+
     return (
         <TextField
             fullWidth
-            value={value ?? ''}
+            value={config.value ?? ''}
             // disabled={disabled}
-            // onChange={handleChange}
+            onChange={handleChange}
             label={props.name}
+            size='small'
         />
     )
 }

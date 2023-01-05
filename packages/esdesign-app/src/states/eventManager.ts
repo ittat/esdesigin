@@ -4,6 +4,7 @@ export type ACTION_TYPES =
     | 'canvas.element.focus'
     | 'canvas.element.deleted'
     | 'appdom.update'
+    | 'component.props.update'
 
 export interface IEvent {
     readonly listeners: Map<ACTION_TYPES, Set<Function>>,
