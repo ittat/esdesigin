@@ -206,7 +206,10 @@ export interface IFetchConfig {
 }
 
 
-export interface ISoltProps {
+export interface ICommonProps {
+    [k: string]: any
+}
+
+export interface ISoltProps extends ICommonProps {
     children?: ReactNode | undefined;
-    [k:string]:any
 }

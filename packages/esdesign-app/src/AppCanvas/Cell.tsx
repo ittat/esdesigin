@@ -82,12 +82,14 @@ const Cell = (props: IProps) => {
 
 
 
+    const cleanProps = node.getProps()
+    
 
     return <Box className={`node-element`} data-node={node} data-nodeid={node.id} >
 
         {
             node.type == 'slot'
-                ? <virulDom.current {...node.getProps()} >
+                ? <virulDom.current {...cleanProps} >
                     {node ?
                         node.childSort.length ?
                             node.childSort.map(nodeId => <Cell key={nodeId} node={node.child[nodeId]} />) :
@@ -95,7 +97,7 @@ const Cell = (props: IProps) => {
                         <LoadingComponent />
                     }
                 </virulDom.current>
-                : <virulDom.current />
+                : <virulDom.current {...cleanProps} />
         }
     </Box>
 

@@ -35,3 +35,11 @@ export function createEsDesginComponent(component: React.ComponentType, type: IC
 export function isArgConfig(obj: any): obj is ArgConfig {
     return obj && (typeof obj == 'object') && ('type' in obj)
 }
+
+export function filterProps(props: RecordStr<any>, excludes: Array<string> = []) {
+    const clearProps = { ...props }
+    excludes.forEach(key => {
+        delete clearProps[key]
+    })
+    return clearProps
+}

@@ -1,12 +1,19 @@
 import { Button as B } from '@mui/material';
 import * as React from 'react';
-import { createEsDesginComponent } from '../utils';
+import { MUIColorConfig, MUISizeConfig } from '../argCommons';
+import { ICommonProps } from '../types';
+import { createEsDesginComponent, filterProps } from '../utils';
 
 
-function Button() {
+function Button(props: ICommonProps) {
+
+  const text = props.text || 'Button'
+
+  const clearProps = filterProps(props,['text','children'])
+
   return (
-    <B style={{ fontSize: '30px' }} >
-     TestButton
+    <B  {...clearProps}>
+      {text}
     </B>
   );
 }
@@ -14,9 +21,16 @@ function Button() {
 
 
 
-export default createEsDesginComponent(Button,'', {
-  text:{
-    type:'string',
-    value:'button'
-  }
+export default createEsDesginComponent(Button, '', {
+  text: {
+    type: 'string',
+    value: 'button'
+  },
+  variant: {
+    type: 'string',
+    value: 'contained',
+    enums: ["", "text", "outlined", "contained"]
+  },
+  ...MUISizeConfig,
+  ...MUIColorConfig
 });  
