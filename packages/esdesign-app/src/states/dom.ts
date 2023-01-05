@@ -1,4 +1,4 @@
-import { IPropsConfig, IESDesiginComponent, ICustomComponentNode, DomNodeBase, IElementNode, IPageNode, RecordStr, Types, IAppConfig, ICustomComponentConfig, IPageConfig, IComponentConfig, IFetchConfig, ID } from "packages/esdesign-components/dist/types"
+import { IPropsConfig, IESDesiginComponent, ICustomComponentNode, DomNodeBase, IElementNode, IPageNode, RecordStr, Types, IAppConfig, ICustomComponentConfig, IPageConfig, IComponentConfig, IFetchConfig, ID, ArgConfig } from "packages/esdesign-components/dist/types"
 import { IAppDom, Rectangle } from "../types"
 import { compileModule } from "packages/esdesign-core/dist"
 import loadModule from "packages/esdesign-core/dist/loadModule"
@@ -15,7 +15,7 @@ export class AppConfig implements IAppConfig {
     appName: string
     id: string
     pages: RecordStr<PageConfig> = {}
-    customComponents: RecordStr<ICustomComponentConfig> = {}
+    customComponents: RecordStr<ICustomComponentConfig<ArgConfig>> = {}
 
     materials: Record<string, IESDesiginComponent>
 
@@ -30,6 +30,9 @@ export class AppConfig implements IAppConfig {
         this.version = appConfig.version
         this.appName = appConfig.appName
 
+        this.customComponents = appConfig.customComponents
+
+
         // pages
         Object.entries(appConfig.pages).forEach(([id, page]) => {
             this.pages[id] = new PageConfig({ config: page, appConfig: this })
@@ -40,7 +43,7 @@ export class AppConfig implements IAppConfig {
         //     this.customComponents[id] = new CustomComponentConfig({ config: comp })
         // })
 
-        this.customComponents = appConfig.customComponents
+
 
         makeObservable(this, {
             editedPage: observable.ref,
@@ -146,7 +149,7 @@ export class PageConfig implements IPageConfig {
 
         // this.domTree 
         Object.entries(config.domTree).forEach(([id, node]) => {
-            this.domTree[id] = new ComponentConfig({ config: node })
+            this.domTree[id] = new ComponentConfig({ config: node, appRoot: this.appRoot })
         })
 
         // sort
@@ -230,10 +233,13 @@ export class PageConfig implements IPageConfig {
         if (edgePostion == 'center' && !PageConfig.isPageConfig(this.drogOverNode) && !ComponentConfig.isNonSoltElement(this.drogOverNode)) {
             // 移除dropNode的parent联系
             const parentNode = this.findElementById(this.draggingNode.parentId)
-            parentNode.removeChildrenById(this.draggingNode.id)
+            if (parentNode) {
+                parentNode.removeChildrenById(this.draggingNode.id)
+            }
+
             // 添加新的联系
             this.drogOverNode.addOrMoveNode(this.draggingNode)
-            
+
             this.appRoot.event.dispatch('appdom.update', {})
             this.draggingNode = undefined
             this.drogOverNode = undefined
@@ -291,7 +297,7 @@ export class PageConfig implements IPageConfig {
                         // 创建新的水平父容器PageRow
                         const overNodeIndex = overNodeParent.sort.findIndex(id => id == overNode.id)
                         overNodeParent.removeChildrenById(overNode.id)
-                        const pageRow = new ComponentConfig({ config: this.pageSolt.row })
+                        const pageRow = new ComponentConfig({ config: this.pageSolt.row, appRoot: this.appRoot })
                         if (edgePostion == 'left') {
                             pageRow.addOrMoveNode(node)
                             pageRow.addOrMoveNode(overNode)
@@ -320,7 +326,7 @@ export class PageConfig implements IPageConfig {
                     let pageSolt: ComponentConfig = null
 
                     if (edgePostion == 'bottom' || edgePostion == 'top') {
-                        pageSolt = new ComponentConfig({ config: this.pageSolt.column })
+                        pageSolt = new ComponentConfig({ config: this.pageSolt.column, appRoot: this.appRoot })
 
                         if (edgePostion == 'bottom') {
                             pageSolt.addOrMoveNode(overNode)
@@ -330,7 +336,7 @@ export class PageConfig implements IPageConfig {
                             pageSolt.addOrMoveNode(overNode)
                         }
                     } else {
-                        pageSolt = new ComponentConfig({ config: this.pageSolt.row })
+                        pageSolt = new ComponentConfig({ config: this.pageSolt.row, appRoot: this.appRoot })
                         if (edgePostion == 'left') {
                             pageSolt.addOrMoveNode(node)
                             pageSolt.addOrMoveNode(overNode)
@@ -393,9 +399,9 @@ export class PageConfig implements IPageConfig {
 
         if (props.type == 'NEW') {
             if (CustomComponentConfig.IsCustomComponentConfigType(props.config)) {
-                this.draggingNode = new CustomComponentConfig({ config: props.config, parentId: this.id })
+                this.draggingNode = new CustomComponentConfig({ config: props.config, parentId: this.id, appRoot: this.appRoot })
             } else {
-                this.draggingNode = new ComponentConfig({ config: props.config })
+                this.draggingNode = new ComponentConfig({ config: props.config, appRoot: this.appRoot })
             }
 
         } else {
@@ -461,24 +467,34 @@ export class PageConfig implements IPageConfig {
 export class ComponentConfig implements IComponentConfig {
     id: string
     parentId: string
-    props?: RecordStr<IPropsConfig>
-    attrs: { componentName: { type: Types.String; value: string }; materialId: string }
+    props?: RecordStr<ArgConfig> = {}
+    attrs: { componentName: { type: Types.String; value: string }; materialId: string } & RecordStr<ArgConfig>
     type: "" | "slot"
     child: RecordStr<ComponentConfig> = {}
     childSort: Array<ID> = []
+
+    appRoot: AppConfig
+
+    materialId: string
 
     dom
 
 
     rect?: Rectangle = undefined
 
-
-    constructor({ config }: { config: IComponentConfig }) {
+    /** 
+     * TODO: config 和 materialsConfig有功能重叠了！！！！
+     * materialsConfig - 如果是custom 的 component ，我们需要提供一些预处理，并传入materialsConfig
+     */
+    constructor({ config, appRoot, materialsConfig }: { config: IComponentConfig, appRoot: AppConfig, materialsConfig?: IComponentConfig<ArgConfig> }) {
 
         this.parentId = config.parentId
-        this.props = config.props
-        this.attrs = config.attrs
+        this.appRoot = appRoot
         this.type = config.type
+        this.materialId = config.attrs.materialId
+
+    
+
 
         if (!config.id) {
             this.id = getUUID()
@@ -486,9 +502,43 @@ export class ComponentConfig implements IComponentConfig {
             this.id = config.id
         }
 
+        // props 和 attrs 的 合并预处理
+        const materialConfig = this.materialId.startsWith('customComponent.') ?
+            appRoot.customComponents[this.materialId.split('customComponent.')[1]] :
+            appRoot.materials[this.materialId]?.EsDesginComponent
+
+        if (!!materialConfig) {
+            const { props, attrs } = materialConfig
+            //--- props ----
+            this.props = props
+
+            Object.entries(config.props || {}).forEach(([name, value]) => {
+                if (name in this.props) {
+                    this.props[name].value = value
+                }
+            })
+
+            //---- attrs ----
+            this.attrs = { ...attrs }
+            const preProcessingAttr = { ...attrs } as RecordStr<ArgConfig>
+            delete preProcessingAttr['materialId']
+            delete preProcessingAttr['componentName']
+            delete preProcessingAttr['source']
+
+            Object.entries(preProcessingAttr || {}).forEach(([name, value]) => {
+                if (name in this.attrs) {
+                    // @ts-ignore
+                    (this.attrs[name] as ArgConfig).value = value
+                }
+            })
+        } else {
+            console.warn("ComponentConfig constructor Error!");
+        }
+
+
         // this.child 
         Object.entries(config.child || {}).forEach(([id, node]) => {
-            this.child[id] = new ComponentConfig({ config: node })
+            this.child[id] = new ComponentConfig({ config: node, appRoot })
         })
 
         // this.childSort 
@@ -530,7 +580,6 @@ export class ComponentConfig implements IComponentConfig {
     }
 
     addOrMoveNode(node: ComponentConfig, insertIndex?: number) {
-        debugger
         node.parentId = this.id
 
         // 判断是否是位置移动
@@ -570,10 +619,9 @@ export class ComponentConfig implements IComponentConfig {
 
     static async initMaterial(config: ComponentConfig, appApi: AppConfig, materials: Record<string, IESDesiginComponent>) {
         let dom: IESDesiginComponent = materials['Error']
-
-
-        if (config.attrs.materialId.startsWith('customComponent.')) {
-            const id = config.attrs.materialId.split('customComponent.')[1]
+        
+        if (config.materialId.startsWith('customComponent.')) {
+            const id = config.materialId.split('customComponent.')[1]
 
 
             const strCode = appApi.customComponents[id].attrs.source.value
@@ -585,7 +633,7 @@ export class ComponentConfig implements IComponentConfig {
                 dom = element
             }
         } else {
-            const id = config.attrs.materialId
+            const id = config.materialId
             const maybeMaterials = materials[id]
             if (maybeMaterials) {
                 dom = maybeMaterials
@@ -599,18 +647,19 @@ export class ComponentConfig implements IComponentConfig {
 
     // 是否为PageRow
     static isPageRowElement(config: ComponentConfig) {
-        return config.attrs.materialId == 'PageRow'
+        return config.materialId == 'PageRow'
     }
 
     // 是否为PageColumn
     static isPageColumnElement(config: ComponentConfig) {
-        return config.attrs.materialId == 'PageColumn'
+        return config.materialId == 'PageColumn'
     }
 
     // 是否为普通元素组件
     static isNonSoltElement(config: ComponentConfig) {
         return config.type != 'slot'
     }
+
 
 
 
@@ -629,15 +678,19 @@ export class CustomComponentConfig extends ComponentConfig implements ICustomCom
             value: string;
         };
         materialId: string;
-    };
+    } & RecordStr<ArgConfig>;
 
-    constructor({ config, parentId }: { config: ICustomComponentConfig, parentId: string }) {
+    constructor({ config, parentId, appRoot }: { config: ICustomComponentConfig, parentId: string, appRoot: AppConfig }) {
+
 
         const componentConfig: IComponentConfig = {
             ...config,
             parentId
         }
-        super({ config: componentConfig })
+
+
+
+        super({ config: componentConfig, appRoot, materialsConfig: componentConfig })
         // ICustomComponentConfig 和 CustomComponentConfig 区别：
         //     ICustomComponentConfig 没有
         //     parentId?: string;

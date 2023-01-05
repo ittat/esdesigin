@@ -2,9 +2,40 @@
 import { ReactNode } from "react";
 import { ESDESIGN_COMPONENT } from "./utils";
 export declare type IESDesiginComponent = React.ComponentType & {
-    [ESDESIGN_COMPONENT]: IComponentConfig;
+    [ESDESIGN_COMPONENT]: IComponentConfig<ArgConfig>;
 };
 export declare type IArgsConfigs = Record<string, IPropsConfig>;
+export type IArgsTypes = 'string' | 'number' | 'object' | 'array' | 'event'
+
+export interface ArgStringConfig {
+    type: 'string';
+    value: string;
+    enum?: Array<string>;
+    required?: boolean;
+}
+export interface ArgNumberConfig {
+    type: 'number';
+    value: number;
+    enum?: Array<number>;
+    range?: [number, number];
+    required?: boolean;
+}
+export interface ArgBooleanConfig {
+    type: 'boolean';
+    value: boolean;
+    required?: boolean;
+}
+export interface ArgJsonConfig {
+    type: 'object' | 'array';
+    value: string;
+    required?: boolean;
+}
+export interface ArgEventConfig {
+    type: 'event';
+    value: string;
+}
+export type ArgConfig = ArgStringConfig | ArgNumberConfig | ArgJsonConfig | ArgBooleanConfig | ArgEventConfig;
+
 export interface IPropsConfig {
     type: string;
     value: any;
@@ -113,17 +144,17 @@ export interface IPageConfig {
 
 export type ID = string
 
-export interface IComponentConfig {
+export interface IComponentConfig<T = any> {
     id: string,
     parentId: string;
-    props?: RecordStr<IPropsConfig>;
+    props?: RecordStr<T>;
     attrs: {
         componentName: {
             type: Types.String;
             value: string;
         };
         materialId: string;
-    };
+    } & RecordStr<T>;
     type: 'slot' | '',
     child?: RecordStr<IComponentConfig>,
     sort?: Array<ID>;
@@ -137,8 +168,8 @@ export interface IComponentConfig {
 //     parentId?: string;
 //     child:undefined;
 //     childSort:undefined
-//      attrs.materialId
-export interface ICustomComponentConfig extends IComponentConfig {
+//     attrs.materialId
+export interface ICustomComponentConfig<T = any> extends IComponentConfig<T> {
     parentId: string;
     child?: RecordStr<IComponentConfig>;
     sort?: Array<ID>;
@@ -152,8 +183,7 @@ export interface ICustomComponentConfig extends IComponentConfig {
             value: string;
         };
         materialId: string;
-    };
-
+    } & RecordStr<T>;
 }
 
 export interface IFetchConfig {

@@ -14,4 +14,9 @@ function Button() {
 
 
 
-export default createEsDesginComponent(Button,'', {});  
+export default createEsDesginComponent(Button,'', {
+  text:{
+    type:'string',
+    value:'button'
+  }
+});  

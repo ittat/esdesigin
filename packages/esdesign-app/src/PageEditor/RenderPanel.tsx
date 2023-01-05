@@ -8,10 +8,12 @@ import React, { useContext, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import { PageProvider, useAppDom } from "../Provider"
 import { PageConfig } from "../states/dom"
+import SetterPanel from "./SetterPanel/SetterPanel"
 
 const ComponentSetter = styled('div')({
     // width: '250px',
     // backgroundColor: 'gray'
+    height:'100%'
 })
 
 const RenderPanelContainer = styled('div')({
@@ -53,7 +55,9 @@ const RenderPanel = () => {
                     <CanvasHost />
                     <ButtomSwiper />
                 </div>
-                <ComponentSetter>ComponentSetter</ComponentSetter>
+                <ComponentSetter>
+                    <SetterPanel/>
+                </ComponentSetter>
             </SplitPane>
             {/* <PageEditor/> */}
 

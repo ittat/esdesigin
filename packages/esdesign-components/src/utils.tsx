@@ -1,9 +1,9 @@
-import { DomNodeBase, DomNodeType, IArgsConfigs, IComponentConfig, IESDesiginComponent, Types } from "./types";
+import { ArgConfig, DomNodeBase, DomNodeType, IArgsConfigs, IComponentConfig, IESDesiginComponent, RecordStr, Types } from "./types";
 
 export const ESDESIGN_COMPONENT = 'EsDesginComponent';
 
 
-export function createEsDesginComponent(component: React.ComponentType, type: IComponentConfig["type"], config: IArgsConfigs) {
+export function createEsDesginComponent(component: React.ComponentType, type: IComponentConfig["type"], propsConfig?: RecordStr<ArgConfig>,attrsConfig?:RecordStr<ArgConfig>) {
 
     // return {
     //     ...component,
@@ -15,7 +15,7 @@ export function createEsDesginComponent(component: React.ComponentType, type: IC
     return Object.assign(component,
         {
             [ESDESIGN_COMPONENT]: {
-                props: config,
+                props: propsConfig,
                 parentId: '',
                 type: type || '',
                 attrs: {
@@ -23,7 +23,8 @@ export function createEsDesginComponent(component: React.ComponentType, type: IC
                         type: 1,
                         value: component.name
                     },
-                    materialId: component.name
+                    materialId: component.name,
+                    ...attrsConfig
                 }
             } as IComponentConfig
         }
