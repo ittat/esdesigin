@@ -11,11 +11,10 @@ const AppWorkspace = () => {
 
 
     return (<Provider>
-
         <Routes >
             <Route  element={<AppEditorShell />}>
-                <Route  key={"/page/:nodeId"}  path="/page/:nodeId/*" element={<AppEditor />} />
-                <Route  key={'/codeComponents/:nodeId'}  path="/codeComponents/:nodeId" element={<CodeComponentEditor />} />
+                <Route key={'1'} path="/codeComponents/:nodeId" element={<CodeComponentEditor />} />
+                <Route key={"2"} path="/page/:nodeId" element={<AppEditor />} />
             </Route>
         </Routes>
     </Provider>

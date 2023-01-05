@@ -25,7 +25,7 @@ function PageRow(props: ISoltProps) {
 export default createEsDesginComponent(PageRow, 'slot', {
   justifyContent: {
     type: 'string',
-    value: 'end',
+    value: 'start',
     enums: ['start', 'center', 'end']
   }
 });  

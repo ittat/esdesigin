@@ -1,13 +1,15 @@
 # 正在实现
  - ## 优先级高
 
-    实现 Setter Panel 
+    CustomComponent 的依赖引入问题
+
+  
 
  - ## 优先级低
 
-    CustomComponent 的依赖引入问题
 
-    路由切换问题 
+
+    完善 Setter Panel 
 
     
  - ## 逻辑问题
@@ -59,5 +61,6 @@ Slot 组件适配
  - 实现 PageRow、column 的对齐 
  - 补充Button props
  - 补充 boolean Setter
+ - 解决 路由切换问题   
 
 

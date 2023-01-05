@@ -16,7 +16,7 @@ const Homes = (props: IHomesProps) => {
     return <NoSsr>
 
         <BrowserRouter>
-            <Routes>
+            <Routes >
                 <Route path="/" element={<Navigate to="apps" replace />} />
                 <Route path="/apps" element={<AppsOverView />} />
                 <Route path="/app/:appId/*" element={<AppWorkspace />} />

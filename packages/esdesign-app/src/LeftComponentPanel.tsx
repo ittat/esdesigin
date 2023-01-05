@@ -1,12 +1,11 @@
 import { TreeItem, TreeView } from "@mui/lab"
 import { Box, Button, TextField } from "@mui/material"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import { useAppDom } from "./Provider";
 import { useEffect, useMemo, useReducer, useState } from "react";
 import { IPageNode, Types } from "packages/esdesign-components/dist/types";
-import Link from "next/link";
 import { Stack } from "@mui/system";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -130,7 +129,7 @@ const LeftComponentPanel = () => {
                 <Box>Custom Components</Box>
                 <Button onClick={() => handleAskName('customComponent')}>+</Button>
             </Stack>}>
-                {customComps.map(customComp => <Link key={customComp.node.id} href={`/app/appId/codeComponents/${customComp.node.id}`}>
+                {customComps.map(customComp => <Link key={customComp.node.id} to={`/app/appId/codeComponents/${customComp.node.id}`}>
                     <TreeItem nodeId={customComp.node.id} label={customComp.node.attrs.componentName.value} />
                 </Link>)}
             </TreeItem>
@@ -139,7 +138,7 @@ const LeftComponentPanel = () => {
                 <Button onClick={() => handleAskName('page')}>+</Button>
             </Stack>}>
 
-                {pages.map(page => <Link  key={page.id} href={`/app/appId/page/${page.id}`}>
+                {pages.map(page => <Link  key={page.id} to={`/app/appId/page/${page.id}`}>
                     <TreeItem nodeId={page.id} label={page.pageName as string} />
                 </Link>)}
             </TreeItem>
