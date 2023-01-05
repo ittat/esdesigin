@@ -1,4 +1,4 @@
-import { ArgConfig } from "./types";
+import { ArgBooleanConfig, ArgConfig } from "./types";
 
 export const MUISizeConfig = {
     size: {
@@ -14,4 +14,18 @@ export const MUIColorConfig = {
         value: 'inherit',
         enums: ["inherit", "primary", "secondary", "success", "error", "info", "warning"]
     } as ArgConfig
+}
+
+export const disabledConfig = {
+    disabled: {
+        type: 'boolean',
+        value: false,
+    } as ArgBooleanConfig
+}
+
+export const MUIfullWidthConfig = {
+    fullWidth: {
+        type: 'boolean',
+        value: false,
+    } as ArgBooleanConfig
 }

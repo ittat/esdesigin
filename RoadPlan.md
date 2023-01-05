@@ -39,6 +39,8 @@ shema 导出导入
 
 界面样式
 
+props 的 required 标记
+
 
 # 已经实现
 
@@ -51,10 +53,11 @@ Slot 组件适配
 
 添加git代码管理
 
-重新整理 settr props 标准协议问题
-
-完善props的 interface part 1
-
-实现 PageRow、column 的对齐 
+ 2023-01-05
+ - 重新整理 settr props 标准协议问题
+ - 完善props的 interface part 1
+ - 实现 PageRow、column 的对齐 
+ - 补充Button props
+ - 补充 boolean Setter
 
 

@@ -1,6 +1,6 @@
 import { Button as B } from '@mui/material';
 import * as React from 'react';
-import { MUIColorConfig, MUISizeConfig } from '../argCommons';
+import { disabledConfig, MUIColorConfig, MUIfullWidthConfig, MUISizeConfig } from '../argCommons';
 import { ICommonProps } from '../types';
 import { createEsDesginComponent, filterProps } from '../utils';
 
@@ -32,5 +32,7 @@ export default createEsDesginComponent(Button, '', {
     enums: ["", "text", "outlined", "contained"]
   },
   ...MUISizeConfig,
-  ...MUIColorConfig
+  ...MUIColorConfig,
+  ...MUIfullWidthConfig,
+  ...disabledConfig,
 });  

@@ -9,6 +9,7 @@ import LinkIcon from '@mui/icons-material/Link';
 import StringEditor from "./StringEditor";
 import SelectEditor from "./SelectEditor";
 import { observer } from "mobx-react";
+import BooleanEditor from "./BooleanEditor";
 
 
 const PropBindControl = (props: { sx?: SxProps<Theme> }) => {
@@ -57,6 +58,8 @@ const PropEditor = (props: IProps) => {
         if (config.type == 'string') {
 
             return config.enums ? <SelectEditor {...commonProps} config={config} /> : <StringEditor {...commonProps} config={config} />
+        }else if(config.type == 'boolean'){
+            return <BooleanEditor  {...commonProps} config={config}/>
         }
 
         return <></>
@@ -67,7 +70,7 @@ const PropEditor = (props: IProps) => {
 
 
 
-    return <PropItem direction='row' justifyContent='center' >
+    return <PropItem direction='row' justifyContent="space-between" >
         {labelSplite ? name : null}
         {getConfigInput}
 

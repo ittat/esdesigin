@@ -22,7 +22,7 @@ function PageColumn(props: ISoltProps) {
 export default createEsDesginComponent(PageColumn, 'slot', {
   alignItems: {
     type: 'string',
-    value: 'end',
+    value: 'unset',
     enums: ['unset','start', 'center', 'end']
   }
 });  
