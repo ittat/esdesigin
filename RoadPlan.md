@@ -5,7 +5,7 @@
       - mui 样式问题 - ?
 
 
-  CustomComponent 编辑界面 添加 运行按钮
+  
 
  - ## 优先级低
    
@@ -81,4 +81,5 @@ Slot 组件适配
  - feature: CustomComponent 的 config 提取分离
  - feature: 完善 CustomComponent 编辑界面UI
  - feature: 完善 CustomComponent 完善 props 预览区域
+ - feature: 实现 CustomComponent 编辑界面 添加 运行按钮
 

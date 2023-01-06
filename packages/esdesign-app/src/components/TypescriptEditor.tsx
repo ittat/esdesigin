@@ -14,6 +14,7 @@ export interface TypescriptEditorProps extends Omit<MonacoEditorProps, 'language
   onSave?: (value: string) => void;
   functionBody?: boolean;
   topLevelAwait?: boolean;
+  refT:any
 }
 
 export default function TypescriptEditor({
@@ -35,5 +36,5 @@ export default function TypescriptEditor({
     return { diagnosticCodesToIgnore };
   }, [functionBody, topLevelAwait]);
 
-  return <MonacoEditor language="typescript" diagnostics={diagnostics} {...props} />;
+  return <MonacoEditor language="typescript" diagnostics={diagnostics} {...props} ref={props.refT} />;
 }

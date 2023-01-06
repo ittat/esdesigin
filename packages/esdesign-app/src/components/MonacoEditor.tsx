@@ -404,6 +404,7 @@ export default React.forwardRef<MonacoEditorHandle, MonacoEditorProps>(function 
       instance.onDidFocusEditorWidget(() => setIsFocused(true));
       instance.onDidBlurEditorWidget(() => setIsFocused(false));
 
+      // @ts-ignore
       instance.addCommand(monaco.KeyMod.chord(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS), function () {
         // alert('saved!');
         const editorValue = instance.getValue();

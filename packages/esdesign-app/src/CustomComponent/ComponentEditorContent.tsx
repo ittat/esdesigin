@@ -16,6 +16,7 @@ import { useParams } from "react-router-dom"
 import { createCustomComponentName } from "packages/esdesign-components/dist"
 import build from "next/dist/build"
 import PropsPreviewPanel from "./PropsPreviewPanel"
+import { monaco } from "react-monaco-editor"
 
 const TypescriptEditor = dynamic(() => import("../components/TypescriptEditor"), {
     ssr: false
@@ -86,7 +87,10 @@ const ButtonBan = (props: { onPreview?(): void, onSave?(): void }) => {
 const ComponentEditorContent = () => {
 
     const iframeRef = useRef<any>(null)
+    const editorRef = useRef<any>(null)
     const [iframeLoaded, onLoad] = React.useReducer(() => true, false);
+
+
 
     const [value, setValue] = useState(templator)
 
@@ -146,6 +150,16 @@ const ComponentEditorContent = () => {
         appDom.addOrUpdateCustomElement(customConfig)
     }, [value, previewData, appDom])
 
+    const onPreviewHandler = useCallback(() => {
+
+        const editor: monaco.editor.IStandaloneCodeEditor | undefined = editorRef.current?.editor
+        if (editor) {
+            const newValue = editor.getValue()
+            setValue(newValue)
+        }
+
+    }, [editorRef.current])
+
 
 
     useEffect(() => {
@@ -178,6 +192,7 @@ const ComponentEditorContent = () => {
     return <Box sx={{ height: '100%', width: '100%' }}>
         <SplitPane split="vertical" allowResize size="50%">
             <TypescriptEditor
+                refT={editorRef}
                 value={value}
                 onChange={() => { }}
                 onSave={(newValue) => {
@@ -219,7 +234,7 @@ const ComponentEditorContent = () => {
         }
 
 
-        <ButtonBan onPreview={() => { }} onSave={onSaveToAppDomHandler} />
+        <ButtonBan onPreview={onPreviewHandler} onSave={onSaveToAppDomHandler} />
 
     </Box>
 }
