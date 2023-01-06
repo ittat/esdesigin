@@ -5,6 +5,8 @@ export type ACTION_TYPES =
     | 'canvas.element.deleted'
     | 'appdom.update'
     | 'component.props.update'
+    | 'appdom.add.customComponents'
+    | 'appdom.add.page'
 
 export interface IEvent {
     readonly listeners: Map<ACTION_TYPES, Set<Function>>,

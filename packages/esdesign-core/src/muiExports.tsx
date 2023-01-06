@@ -1,4 +1,7 @@
 // @ts-ignore
+import DayJsDefault, * as DayJs from 'dayjs';
+
+// @ts-ignore
 import muiMaterialDefault, * as muiMaterial from '@mui/material';
 import muiMaterialAccordionDefault, * as muiMaterialAccordion from '@mui/material/Accordion';
 import muiMaterialCssBaselineDefault, * as muiMaterialCssBaseline from '@mui/material/CssBaseline';
@@ -39,10 +42,14 @@ import muiMaterialAutocompleteDefault, * as muiMaterialAutocomplete from '@mui/m
 import muiMaterialDrawerDefault, * as muiMaterialDrawer from '@mui/material/Drawer';
 import muiMaterialListSubheaderDefault, * as muiMaterialListSubheader from '@mui/material/ListSubheader';
 import muiMaterialStepButtonDefault, * as muiMaterialStepButton from '@mui/material/StepButton';
+// @ts-ignore
+import muiMaterialclassNameDefault, * as muiMaterialclassName from '@mui/material/className';
 import muiMaterialAvatarDefault, * as muiMaterialAvatar from '@mui/material/Avatar';
 import muiMaterialFabDefault, * as muiMaterialFab from '@mui/material/Fab';
 import muiMaterialMenuDefault, * as muiMaterialMenu from '@mui/material/Menu';
 import muiMaterialStepConnectorDefault, * as muiMaterialStepConnector from '@mui/material/StepConnector';
+// @ts-ignore
+import muiMaterialcolorsDefault, * as muiMaterialcolors from '@mui/material/colors';
 import muiMaterialAvatarGroupDefault, * as muiMaterialAvatarGroup from '@mui/material/AvatarGroup';
 import muiMaterialFadeDefault, * as muiMaterialFade from '@mui/material/Fade';
 import muiMaterialMenuItemDefault, * as muiMaterialMenuItem from '@mui/material/MenuItem';
@@ -68,6 +75,8 @@ import muiMaterialBoxDefault, * as muiMaterialBox from '@mui/material/Box';
 import muiMaterialFormHelperTextDefault, * as muiMaterialFormHelperText from '@mui/material/FormHelperText';
 import muiMaterialNoSsrDefault, * as muiMaterialNoSsr from '@mui/material/NoSsr';
 import muiMaterialSvgIconDefault, * as muiMaterialSvgIcon from '@mui/material/SvgIcon';
+// @ts-ignore
+import muiMateriallocaleDefault, * as muiMateriallocale from '@mui/material/locale';
 import muiMaterialBreadcrumbsDefault, * as muiMaterialBreadcrumbs from '@mui/material/Breadcrumbs';
 import muiMaterialFormLabelDefault, * as muiMaterialFormLabel from '@mui/material/FormLabel';
 import muiMaterialOutlinedInputDefault, * as muiMaterialOutlinedInput from '@mui/material/OutlinedInput';
@@ -86,6 +95,8 @@ import muiMaterialTabScrollButtonDefault, * as muiMaterialTabScrollButton from '
 import muiMaterialHiddenDefault, * as muiMaterialHidden from '@mui/material/Hidden';
 import muiMaterialPaperDefault, * as muiMaterialPaper from '@mui/material/Paper';
 import muiMaterialTableDefault, * as muiMaterialTable from '@mui/material/Table';
+// @ts-ignore
+import muiMaterialstylesDefault, * as muiMaterialstyles from '@mui/material/styles';
 import muiMaterialCardDefault, * as muiMaterialCard from '@mui/material/Card';
 import muiMaterialIconDefault, * as muiMaterialIcon from '@mui/material/Icon';
 import muiMaterialPopoverDefault, * as muiMaterialPopover from '@mui/material/Popover';
@@ -94,6 +105,8 @@ import muiMaterialCardActionAreaDefault, * as muiMaterialCardActionArea from '@m
 import muiMaterialIconButtonDefault, * as muiMaterialIconButton from '@mui/material/IconButton';
 import muiMaterialPopperDefault, * as muiMaterialPopper from '@mui/material/Popper';
 import muiMaterialTableCellDefault, * as muiMaterialTableCell from '@mui/material/TableCell';
+// @ts-ignore
+import muiMaterialtransitionsDefault, * as muiMaterialtransitions from '@mui/material/transitions';
 import muiMaterialCardActionsDefault, * as muiMaterialCardActions from '@mui/material/CardActions';
 import muiMaterialImageListDefault, * as muiMaterialImageList from '@mui/material/ImageList';
 import muiMaterialPortalDefault, * as muiMaterialPortal from '@mui/material/Portal';
@@ -126,6 +139,8 @@ import muiMaterialCircularProgressDefault, * as muiMaterialCircularProgress from
 import muiMaterialInputLabelDefault, * as muiMaterialInputLabel from '@mui/material/InputLabel';
 import muiMaterialSelectDefault, * as muiMaterialSelect from '@mui/material/Select';
 import muiMaterialTabsDefault, * as muiMaterialTabs from '@mui/material/Tabs';
+// @ts-ignore
+import muiMaterialutilsDefault, * as muiMaterialutils from '@mui/material/utils';
 import muiMaterialClickAwayListenerDefault, * as muiMaterialClickAwayListener from '@mui/material/ClickAwayListener';
 import muiMaterialSkeletonDefault, * as muiMaterialSkeleton from '@mui/material/Skeleton';
 import muiMaterialTextFieldDefault, * as muiMaterialTextField from '@mui/material/TextField';
@@ -137,7 +152,6 @@ import muiMaterialContainerDefault, * as muiMaterialContainer from '@mui/materia
 import muiMaterialLinkDefault, * as muiMaterialLink from '@mui/material/Link';
 import muiMaterialSliderDefault, * as muiMaterialSlider from '@mui/material/Slider';
 import muiMaterialToggleButtonDefault, * as muiMaterialToggleButton from '@mui/material/ToggleButton';
-
 
 function esm(defaultExport: any, namedExports: any) {
   return { ...namedExports, default: defaultExport, __esModule: true };
@@ -220,10 +234,12 @@ const muiMaterialExports = new Map([
   ['@mui/material/Drawer', esm(muiMaterialDrawerDefault, muiMaterialDrawer)],
   ['@mui/material/ListSubheader', esm(muiMaterialListSubheaderDefault, muiMaterialListSubheader)],
   ['@mui/material/StepButton', esm(muiMaterialStepButtonDefault, muiMaterialStepButton)],
+  ['@mui/material/className', esm(muiMaterialclassNameDefault, muiMaterialclassName)],
   ['@mui/material/Avatar', esm(muiMaterialAvatarDefault, muiMaterialAvatar)],
   ['@mui/material/Fab', esm(muiMaterialFabDefault, muiMaterialFab)],
   ['@mui/material/Menu', esm(muiMaterialMenuDefault, muiMaterialMenu)],
   ['@mui/material/StepConnector', esm(muiMaterialStepConnectorDefault, muiMaterialStepConnector)],
+  ['@mui/material/colors', esm(muiMaterialcolorsDefault, muiMaterialcolors)],
   ['@mui/material/AvatarGroup', esm(muiMaterialAvatarGroupDefault, muiMaterialAvatarGroup)],
   ['@mui/material/Fade', esm(muiMaterialFadeDefault, muiMaterialFade)],
   ['@mui/material/MenuItem', esm(muiMaterialMenuItemDefault, muiMaterialMenuItem)],
@@ -264,6 +280,7 @@ const muiMaterialExports = new Map([
   ],
   ['@mui/material/NoSsr', esm(muiMaterialNoSsrDefault, muiMaterialNoSsr)],
   ['@mui/material/SvgIcon', esm(muiMaterialSvgIconDefault, muiMaterialSvgIcon)],
+  ['@mui/material/locale', esm(muiMateriallocaleDefault, muiMateriallocale)],
   ['@mui/material/Breadcrumbs', esm(muiMaterialBreadcrumbsDefault, muiMaterialBreadcrumbs)],
   ['@mui/material/FormLabel', esm(muiMaterialFormLabelDefault, muiMaterialFormLabel)],
   ['@mui/material/OutlinedInput', esm(muiMaterialOutlinedInputDefault, muiMaterialOutlinedInput)],
@@ -291,6 +308,7 @@ const muiMaterialExports = new Map([
   ['@mui/material/Hidden', esm(muiMaterialHiddenDefault, muiMaterialHidden)],
   ['@mui/material/Paper', esm(muiMaterialPaperDefault, muiMaterialPaper)],
   ['@mui/material/Table', esm(muiMaterialTableDefault, muiMaterialTable)],
+  ['@mui/material/styles', esm(muiMaterialstylesDefault, muiMaterialstyles)],
   ['@mui/material/Card', esm(muiMaterialCardDefault, muiMaterialCard)],
   ['@mui/material/Icon', esm(muiMaterialIconDefault, muiMaterialIcon)],
   ['@mui/material/Popover', esm(muiMaterialPopoverDefault, muiMaterialPopover)],
@@ -302,6 +320,7 @@ const muiMaterialExports = new Map([
   ['@mui/material/IconButton', esm(muiMaterialIconButtonDefault, muiMaterialIconButton)],
   ['@mui/material/Popper', esm(muiMaterialPopperDefault, muiMaterialPopper)],
   ['@mui/material/TableCell', esm(muiMaterialTableCellDefault, muiMaterialTableCell)],
+  ['@mui/material/transitions', esm(muiMaterialtransitionsDefault, muiMaterialtransitions)],
   ['@mui/material/CardActions', esm(muiMaterialCardActionsDefault, muiMaterialCardActions)],
   ['@mui/material/ImageList', esm(muiMaterialImageListDefault, muiMaterialImageList)],
   ['@mui/material/Portal', esm(muiMaterialPortalDefault, muiMaterialPortal)],
@@ -364,6 +383,7 @@ const muiMaterialExports = new Map([
   ['@mui/material/InputLabel', esm(muiMaterialInputLabelDefault, muiMaterialInputLabel)],
   ['@mui/material/Select', esm(muiMaterialSelectDefault, muiMaterialSelect)],
   ['@mui/material/Tabs', esm(muiMaterialTabsDefault, muiMaterialTabs)],
+  ['@mui/material/utils', esm(muiMaterialutilsDefault, muiMaterialutils)],
   [
     '@mui/material/ClickAwayListener',
     esm(muiMaterialClickAwayListenerDefault, muiMaterialClickAwayListener),
@@ -392,8 +412,8 @@ const muiMaterialExports = new Map([
 
 
 
+
 export default new Map([
-
+  ['dayjs', esm(DayJsDefault, DayJs)],
   ...muiMaterialExports,
-
 ]);

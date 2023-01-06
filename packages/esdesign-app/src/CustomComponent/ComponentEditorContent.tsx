@@ -3,15 +3,18 @@ import Box from "@mui/material/Box"
 import dynamic from "next/dynamic"
 import React, { useEffect, useRef, useState } from "react"
 import ReactDOM from "react-dom"
-import CodeComponent from "../components/CodeComponent"
+import CodeRuntimeCanvas from "./CodeRuntimeCanvas"
 import SplitPane from "../Layout/SplitPane"
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import ErrorAlert from "../components/ErrorAlert"
 import { useRouter } from "next/router"
 import { useAppDom } from "../Provider"
+import { ExtraLib } from "../components/MonacoEditor"
+
 const TypescriptEditor = dynamic(() => import("../components/TypescriptEditor"), {
     ssr: false
 })
+
 
 
 const CanvasIframe = styled('iframe')({
@@ -25,7 +28,8 @@ function RuntimeError({ error: runtimeError }: FallbackProps) {
 }
 
 const templator = `
-import * as React from 'react';
+//import * as React from 'react';
+import React from "https://esm.sh/react@18"
 function myComponent() {
   return (
     <div style={{fontSize:'30px'}} >lalalalalla</div>
@@ -35,6 +39,20 @@ function myComponent() {
 export default myComponent;    
 `
 
+const extraLibs: ExtraLib[] = [
+    {
+        content: `	declare class Facts {
+              /**
+              * Returns the next fact
+              *   
+             */
+           static next1():string
+        }`,
+    },
+    {
+        content: `declare module "https://*";`,
+      },
+]
 
 const ComponentEditorContent = () => {
 
@@ -48,19 +66,19 @@ const ComponentEditorContent = () => {
     const appDom = useAppDom()
 
 
-  
-    useEffect(() => {
-      const nodeId =  router.query.index[3]
-      if(nodeId){
-       const elements =   appDom.getCustomElements()
-        const element = elements.find(e=>e.node.id == nodeId)
 
-        if(element){
-            setValue(element.code)
+    useEffect(() => {
+        const nodeId = router.query.index[3]
+        if (nodeId) {
+            const elements = appDom.getCustomElements()
+            const element = elements.find(e => e.node.id == nodeId)
+
+            if (element) {
+                setValue(element.code)
+            }
         }
-      }
     }, [router.query])
-    
+
 
     React.useEffect(() => {
         const document = iframeRef.current?.contentDocument;
@@ -80,15 +98,16 @@ const ComponentEditorContent = () => {
         <SplitPane split="vertical" allowResize size="50%">
             <TypescriptEditor
                 value={value}
-                onChange={(newValue) => {
+                onChange={()=>{}}
+                onSave={(newValue) => {
                     setValue(newValue)
                 }}
 
-            //  extraLibs={extraLibs}
+                extraLibs={extraLibs}
             />
 
 
-                
+
 
 
 
@@ -106,8 +125,8 @@ const ComponentEditorContent = () => {
             ?
             ReactDOM.createPortal((
                 <React.Suspense fallback={null}>
-                    <ErrorBoundary resetKeys={[CodeComponent]} fallbackRender={RuntimeError}>
-                        <CodeComponent code={value} />
+                    <ErrorBoundary resetKeys={[CodeRuntimeCanvas]} fallbackRender={RuntimeError}>
+                        <CodeRuntimeCanvas code={value} />
                     </ErrorBoundary>
                 </React.Suspense>
 

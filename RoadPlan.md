@@ -2,14 +2,14 @@
  - ## 优先级高
 
     CustomComponent 的依赖引入问题
-
-  
+      - mui 样式问题 - ?
 
  - ## 优先级低
+   
+   CustomComponent 编辑界面UI
 
-
-
-    完善 Setter Panel 
+   完善 Setter Panel 
+    
 
     
  - ## 逻辑问题
@@ -30,6 +30,11 @@ component List 不在左侧显示（改成在底部抽屉）
 
 Editor 插件性能问题
 
+CustomComponent 的 config 提取分离
+
+ AppsOverView 实现
+
+
 
 # 计划实现
 
@@ -42,6 +47,9 @@ shema 导出导入
 界面样式
 
 props 的 required 标记
+
+monaco-editor 使用监听按键方法实现保存更新代码[here](https://microsoft.github.io/monaco-editor/playground.html#interacting-with-the-editor-listening-to-key-events)
+
 
 
 # 已经实现
@@ -63,4 +71,6 @@ Slot 组件适配
  - 补充 boolean Setter
  - 解决 路由切换问题   
 
+ 2023-01-06
+ - fix:  添加元素报错；future: 编辑器热键保存
 

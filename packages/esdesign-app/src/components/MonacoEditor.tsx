@@ -232,6 +232,7 @@ type EditorOptions = monaco.editor.IEditorOptions & monaco.editor.IGlobalEditorO
 interface MonacoEditorBaseProps {
   value?: string;
   onChange?: (newValue: string) => void;
+  onSave?: (value: string) => void;
   disabled?: boolean;
   sx?: SxProps;
   autoFocus?: boolean;
@@ -245,35 +246,36 @@ interface MonacoEditorBaseProps {
 export type MonacoEditorProps = MonacoEditorBaseProps &
   (
     | {
-        language: 'typescript';
-        diagnostics?: monaco.languages.typescript.DiagnosticsOptions;
-        compilerOptions?: monaco.languages.typescript.CompilerOptions | undefined;
-        extraLibs?: ExtraLib[];
-      }
+      language: 'typescript';
+      diagnostics?: monaco.languages.typescript.DiagnosticsOptions;
+      compilerOptions?: monaco.languages.typescript.CompilerOptions | undefined;
+      extraLibs?: ExtraLib[];
+    }
     | {
-        language: 'json';
-        diagnostics?: monaco.languages.json.DiagnosticsOptions;
-        compilerOptions?: undefined;
-        extraLibs?: undefined;
-      }
+      language: 'json';
+      diagnostics?: monaco.languages.json.DiagnosticsOptions;
+      compilerOptions?: undefined;
+      extraLibs?: undefined;
+    }
     | {
-        language: 'markdown';
-        diagnostics?: undefined;
-        compilerOptions?: undefined;
-        extraLibs?: undefined;
-      }
+      language: 'markdown';
+      diagnostics?: undefined;
+      compilerOptions?: undefined;
+      extraLibs?: undefined;
+    }
     | {
-        language?: string | undefined;
-        diagnostics?: undefined;
-        compilerOptions?: undefined;
-        extraLibs?: undefined;
-      }
+      language?: string | undefined;
+      diagnostics?: undefined;
+      compilerOptions?: undefined;
+      extraLibs?: undefined;
+    }
   );
 
 export default React.forwardRef<MonacoEditorHandle, MonacoEditorProps>(function MonacoEditor(
   {
     value,
     onChange,
+    onSave,
     sx,
     language = 'plaintext',
     diagnostics,
@@ -334,6 +336,7 @@ export default React.forwardRef<MonacoEditorHandle, MonacoEditorProps>(function 
         //   "export { default } from './Breadcrumbs';\nexport * from './Breadcrumbs';\n\nexport { default as breadcrumbsClasses } from './breadcrumbsClasses';\nexport * from './breadcrumbsClasses';\n",
         //   'file:///node_modules/undefined/Breadcrumbs/index.d.ts'
         // );
+
       } else {
         monaco.editor.setModelLanguage(model, 'typescriptBasic');
       }
@@ -401,6 +404,12 @@ export default React.forwardRef<MonacoEditorHandle, MonacoEditorProps>(function 
       instance.onDidFocusEditorWidget(() => setIsFocused(true));
       instance.onDidBlurEditorWidget(() => setIsFocused(false));
 
+      instance.addCommand(monaco.KeyMod.chord(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS), function () {
+        // alert('saved!');
+        const editorValue = instance.getValue();
+        onSave?.(editorValue)
+      });
+
       if (autoFocus && !disabled) {
         instance.focus();
       }
@@ -428,7 +437,7 @@ export default React.forwardRef<MonacoEditorHandle, MonacoEditorProps>(function 
       const onDidFocusEditorTextSub = editor?.onDidFocusEditorText(onFocus);
       return () => onDidFocusEditorTextSub?.dispose();
     }
-    return () => {};
+    return () => { };
   }, [onFocus]);
 
   React.useEffect(() => {
@@ -437,7 +446,7 @@ export default React.forwardRef<MonacoEditorHandle, MonacoEditorProps>(function 
       const onDidBlurEditorTextSub = editor?.onDidBlurEditorText(onBlur);
       return () => onDidBlurEditorTextSub?.dispose();
     }
-    return () => {};
+    return () => { };
   }, [onBlur]);
 
   React.useEffect(() => {

@@ -8,6 +8,7 @@ import { createEsDesginComponent, filterProps } from '../utils';
 function Button(props: ICommonProps) {
 
   const text = props.text || 'Button'
+  
 
   const clearProps = filterProps(props,['text','children'])
 

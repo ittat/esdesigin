@@ -72,7 +72,7 @@ const tempConfig: IAppConfig = {
                         },
                         materialId: 'PageRow'
                     },
-                    sort:['few-4r-4334-34rr--r4','ds-erf23-5t5-5t45t-'],
+                    sort: ['few-4r-4334-34rr--r4', 'ds-erf23-5t5-5t45t-'],
                     child: {
                         'ds-erf23-5t5-5t45t-': {
                             id: 'ds-erf23-5t5-5t45t-',
@@ -152,13 +152,29 @@ const tempConfig: IAppConfig = {
             attrs: {
                 source: {
                     type: 1,
-                    value: "import * as React from 'react';\nfunction myComponent() {\n  return (\n  <div style={{fontSize:'30px'}} >lalalalla</div>\n  );\n } \n export default myComponent; \n"
+                    value: `//import React from "https://esm.sh/react@18";
+import * as React from 'react';
+import  Botton from '@mui/material/Button';
+//import clone from "https://esm.sh/lodash/clone"
+function Component1() {
+  return (
+      <Botton >Merry Xmas 🎄 🎄</Botton>
+  );
+ } 
+function myComponent() {
+  //console.log(clone({test:'sadsda',we:undefined}))
+  return ( <>
+    <Botton>Merry Xmas 🎄</Botton>
+    <Component1 />
+    </>);
+ } 
+ export default myComponent;  `
                 },
                 componentName: {
                     type: 1,
                     value: 'customComp2-id'
                 },
-                materialId: ''
+                materialId: 'customComponent.customComp2-id'
             }
         }
     }

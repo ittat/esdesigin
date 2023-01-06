@@ -2,13 +2,14 @@ import { IPropsConfig, IESDesiginComponent, ICustomComponentNode, DomNodeBase, I
 import { IAppDom, Rectangle } from "../types"
 import { compileModule } from "packages/esdesign-core/dist"
 import loadModule from "packages/esdesign-core/dist/loadModule"
-import { ESDESIGN_COMPONENT } from "packages/esdesign-components/dist"
+import { ESDESIGN_COMPONENT, isArgConfig } from "packages/esdesign-components/dist"
 import { getUUID } from "../globals"
 import { v4 } from "uuid"
 import { action, makeObservable, observable, } from "mobx"
 import { EventManager } from "./eventManager"
 import { RectangleEdge, RECTANGLE_SLOT_CENTER } from "../PageEditor/DetectOverlay"
 
+import _ from "lodash"
 
 export class AppConfig implements IAppConfig {
     version: string
@@ -47,7 +48,7 @@ export class AppConfig implements IAppConfig {
 
         makeObservable(this, {
             editedPage: observable.ref,
-            pages: observable.deep,
+            pages: observable.ref,
             addPage: action.bound,
         })
 
@@ -57,6 +58,9 @@ export class AppConfig implements IAppConfig {
 
     addcustomElement(config: ICustomComponentConfig) {
         this.customComponents[config.id] = config
+
+        this.event.dispatch('appdom.add.customComponents', { config: config })
+
     }
 
     getCustomElements() {
@@ -67,6 +71,7 @@ export class AppConfig implements IAppConfig {
 
     addPage(config: IPageConfig) {
         this.pages[config.id] = new PageConfig({ config, appConfig: this })
+        this.event.dispatch('appdom.add.page', { config: config })
 
     }
     getPages() {
@@ -171,7 +176,7 @@ export class PageConfig implements IPageConfig {
 
         makeObservable(this, {
             //     domTree: observable,
-            sort: observable.deep,
+            sort: observable.shallow,
             // domTree: observable,
             selectedNode: observable.ref,
             drogOverNode: observable.ref,
@@ -398,10 +403,14 @@ export class PageConfig implements IPageConfig {
     async draggingStart(props: { type: 'NEW', config: IComponentConfig | ICustomComponentConfig } | { type: 'EXIST', nodeId: string }) {
 
         if (props.type == 'NEW') {
-            if (CustomComponentConfig.IsCustomComponentConfigType(props.config)) {
-                this.draggingNode = new CustomComponentConfig({ config: props.config, parentId: this.id, appRoot: this.appRoot })
+
+
+            const deepCloneConfig = _.cloneDeep(props.config)
+
+            if (CustomComponentConfig.IsCustomComponentConfigType(deepCloneConfig)) {
+                this.draggingNode = new CustomComponentConfig({ config: deepCloneConfig, parentId: this.id, appRoot: this.appRoot })
             } else {
-                this.draggingNode = new ComponentConfig({ config: props.config, appRoot: this.appRoot })
+                this.draggingNode = new ComponentConfig({ config: deepCloneConfig, appRoot: this.appRoot })
             }
 
         } else {
@@ -493,28 +502,39 @@ export class ComponentConfig implements IComponentConfig {
         this.type = config.type
         this.materialId = config.attrs.materialId
 
+        const isCustomComponentConfig = this.materialId.startsWith('customComponent.')
 
-
-
-        if (!config.id) {
+        if (isCustomComponentConfig || !config.id) {
             this.id = getUUID()
         } else {
             this.id = config.id
         }
 
         // props 和 attrs 的 合并预处理
-        const materialConfig = this.materialId.startsWith('customComponent.') ?
+        let materialConfig = isCustomComponentConfig ?
             appRoot.customComponents[this.materialId.split('customComponent.')[1]] :
             appRoot.materials[this.materialId]?.EsDesginComponent
-
+       
+        materialConfig =  _.cloneDeep(materialConfig)
+        
         if (!!materialConfig) {
-            const { props, attrs } = materialConfig
+
+        
+            const { props = {}, attrs } = materialConfig
             //--- props ----
             this.props = props
 
+
             Object.entries(config.props || {}).forEach(([name, value]) => {
                 if (name in this.props) {
-                    this.props[name].value = value
+
+                    // fix: TODO 解析判断原因，重构
+                    if (isArgConfig(value)) {
+                        this.props[name].value = value.value
+                    } else {
+                        this.props[name].value = value
+                    }
+
                 }
             })
 
@@ -531,6 +551,8 @@ export class ComponentConfig implements IComponentConfig {
                     (this.attrs[name] as ArgConfig).value = value
                 }
             })
+
+   
         } else {
             console.warn("ComponentConfig constructor Error!");
         }
@@ -549,10 +571,10 @@ export class ComponentConfig implements IComponentConfig {
         }
 
         makeObservable(this, {
-            child: observable,
-            childSort: observable,
-            rect: observable,
-            props:observable,
+            child: observable.ref,
+            childSort: observable.shallow,
+            rect: observable.ref,
+            props: observable.ref,
             addOrMoveNode: action.bound,
             updateRect: action.bound,
             removeChildrenById: action.bound
@@ -621,10 +643,13 @@ export class ComponentConfig implements IComponentConfig {
     // 把ArgConfig类型得props转换成key-value类型，喂给react组件
     getProps() {
 
-       return  Object.entries(this.props || {}).reduce((sum, [name, arg], idx) => {
+        const props = Object.entries(this.props || {}).reduce((sum, [name, arg], idx) => {
             sum[name] = arg.value
             return sum
         }, {} as RecordStr<any>)
+
+
+        return props
 
     }
 
@@ -709,7 +734,8 @@ export class CustomComponentConfig extends ComponentConfig implements ICustomCom
         //      attrs.materialId
 
 
-        this.attrs.materialId = `customComponent.${this.id}`
+
+        // this.attrs.materialId = `customComponent.${this.id}`
         // 移除attrs.source
         // delete this.attrs['source']
     }

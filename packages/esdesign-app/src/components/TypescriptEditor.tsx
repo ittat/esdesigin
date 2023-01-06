@@ -11,6 +11,7 @@ import MonacoEditor, { MonacoEditorProps } from './MonacoEditor';
 export interface TypescriptEditorProps extends Omit<MonacoEditorProps, 'language' | 'diagnostics'> {
   value: string;
   onChange: (newValue: string) => void;
+  onSave?: (value: string) => void;
   functionBody?: boolean;
   topLevelAwait?: boolean;
 }

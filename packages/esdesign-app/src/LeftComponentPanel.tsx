@@ -32,10 +32,14 @@ const LeftComponentPanel = () => {
         }
         if (appDom) {
             appDom.event.addListener('appdom.update', farseUpdate)
+            appDom.event.addListener('appdom.add.customComponents', farseUpdate)
+            appDom.event.addListener('appdom.add.page', farseUpdate)
         }
 
         return () => {
             appDom?.event.removeListener('appdom.update', farseUpdate)
+            appDom?.event.removeListener('appdom.add.customComponents', farseUpdate)
+            appDom?.event.removeListener('appdom.add.page', farseUpdate)
         }
 
 
@@ -47,35 +51,34 @@ const LeftComponentPanel = () => {
         setOpen({ state: true, type });
     };
 
-
-
     const handleDialogClose = () => {
         setOpen({ state: false });
     };
 
     const handleDialogOK = () => {
         // 
-
+        const id = getUUID()
         if (open.type == 'customComponent') {
+     
             appDom.addcustomElement({
-                id: getUUID(),
+                id: id,
                 type: '',
                 attrs: {
                     source: {
-                        type: Types.String,
+                        type: 1,
                         value: "import * as React from 'react';\nfunction myComponent() {\n  return (\n  <div style={{fontSize:'30px'}} >lalalalla</div>\n  );\n } \n export default myComponent; \n"
                     },
                     componentName: {
-                        type: Types.String,
+                        type: 1,
                         value: open.name
                     },
-                    materialId: ''
+                    materialId: `customComponent.${id}`
                 },
                 parentId: ""
             })
         } else {
             appDom.addPage({
-                id: getUUID(),
+                id: id,
                 pageName: open.name,
                 domTree: {}
             })
