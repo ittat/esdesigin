@@ -67,7 +67,32 @@ const LeftComponentPanel = () => {
                 attrs: {
                     source: {
                         type: 1,
-                        value: "import * as React from 'react';\nfunction myComponent() {\n  return (\n  <div style={{fontSize:'30px'}} >lalalalla</div>\n  );\n } \n export default myComponent; \n"
+                        value: `
+import * as React from 'react';
+import  Botton from '@mui/material/Button';
+import { createEsDesginComponent } from "@esdesign/components";
+
+function myComponent() {
+  return ( <>
+    <Botton>Merry sadsadXmas 🎄</Botton>
+    </>);
+ } 
+
+
+ export default createEsDesginComponent('${open.name}',myComponent, '', {
+    variant: {
+      type: 'string',
+      value: 'contained',
+      enums: ["", "text", "outlined", "contained"]
+    },
+        variant1: {
+      type: 'string',
+      value: 'contained',
+      enums: ["", "text", "outlined", "contained"]
+    },
+  });  
+ 
+                        `
                     },
                     componentName: {
                         type: 1,

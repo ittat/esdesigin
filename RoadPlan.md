@@ -1,58 +1,46 @@
 # 正在实现
- - ## 优先级高
+ - ### 优先级高
 
-    CustomComponent 的依赖引入问题
+    - CustomComponent 的依赖引入问题
       - mui 样式问题 - ?
 
+    - AppsOverView 实现
+    - setter 的动态绑定逻辑 、表达式逻辑、scope 获取逻辑
+    - Setter 补全props 类型编辑
 
-  
-
- - ## 优先级低
+ - ### 优先级低
    
 
-
-   完善 Setter Panel 
+   - 完善 Setter Panel 
+   - CustomComponent 编辑界面 异常处理
     
 
     
- - ## 逻辑问题
-
-    
-   
-
-    setter 的动态绑定逻辑 、表达式逻辑、scope 获取逻辑
+ - ### 逻辑问题
 
 
-     问题，为什么不把customCompoent 转换成 Component？
+     - 问题，为什么不把customCompoent 转换成 Component？
 
 
 # 正在排期
 
+  - component List 不在左侧显示（改成在底部抽屉） 
+  - 快捷按钮功能
+  - Editor 插件性能问题
+  - Left panel UI
+  - 实现 grid 组件 
 
 
-component List 不在左侧显示（改成在底部抽屉） 
-
-快捷按钮功能
-
-Editor 插件性能问题
-
-
-
- AppsOverView 实现
 
 
 
 # 计划实现
 
-项目独立分包依赖 
-
-实现 grid 组件 
-
-shema 导出导入
-
-界面样式
-
-props 的 required 标记
+  - 项目独立分包依赖 
+  - shema 导出导入
+  - 界面样式
+  - props 的 required 标记
+  - 拓展Antd 功能
 
 
 
@@ -82,4 +70,5 @@ Slot 组件适配
  - feature: 完善 CustomComponent 编辑界面UI
  - feature: 完善 CustomComponent 完善 props 预览区域
  - feature: 实现 CustomComponent 编辑界面 添加 运行按钮
+ - feature: 实现 canvas 元素删除
 

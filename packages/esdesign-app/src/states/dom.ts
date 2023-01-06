@@ -42,10 +42,6 @@ export class AppConfig implements IAppConfig {
             this.pages[id] = new PageConfig({ config: page, appConfig: this })
         })
 
-        // customComponents
-        // Object.entries(appConfig.customComponents).forEach(([id, comp]) => {
-        //     this.customComponents[id] = new CustomComponentConfig({ config: comp })
-        // })
 
 
 
@@ -164,9 +160,9 @@ export class PageConfig implements IPageConfig {
         // this.domTree 
         Object.entries(config.domTree).forEach(([id, node]) => {
             if (CustomComponentConfig.IsCustomComponentConfigType(node)) {
-                this.domTree[id] = new CustomComponentConfig({ config: node, parentId: this.id, appRoot: this.appRoot })
+                this.domTree[id] = new CustomComponentConfig({ config: node, parentId: this.id, appRoot: this.appRoot, pageRoot: this })
             } else {
-                this.domTree[id] = new ComponentConfig({ config: node, appRoot: this.appRoot })
+                this.domTree[id] = new ComponentConfig({ config: node, appRoot: this.appRoot, pageRoot: this })
             }
 
         })
@@ -317,7 +313,7 @@ export class PageConfig implements IPageConfig {
                         // 创建新的水平父容器PageRow
                         const overNodeIndex = overNodeParent.sort.findIndex(id => id == overNode.id)
                         overNodeParent.removeChildrenById(overNode.id)
-                        const pageRow = new ComponentConfig({ config: this.pageSolt.row, appRoot: this.appRoot })
+                        const pageRow = new ComponentConfig({ config: this.pageSolt.row, appRoot: this.appRoot, pageRoot: this })
                         if (edgePostion == 'left') {
                             pageRow.addOrMoveNode(node)
                             pageRow.addOrMoveNode(overNode)
@@ -346,7 +342,7 @@ export class PageConfig implements IPageConfig {
                     let pageSolt: ComponentConfig = null
 
                     if (edgePostion == 'bottom' || edgePostion == 'top') {
-                        pageSolt = new ComponentConfig({ config: this.pageSolt.column, appRoot: this.appRoot })
+                        pageSolt = new ComponentConfig({ config: this.pageSolt.column, appRoot: this.appRoot, pageRoot: this })
 
                         if (edgePostion == 'bottom') {
                             pageSolt.addOrMoveNode(overNode)
@@ -356,7 +352,7 @@ export class PageConfig implements IPageConfig {
                             pageSolt.addOrMoveNode(overNode)
                         }
                     } else {
-                        pageSolt = new ComponentConfig({ config: this.pageSolt.row, appRoot: this.appRoot })
+                        pageSolt = new ComponentConfig({ config: this.pageSolt.row, appRoot: this.appRoot, pageRoot: this })
                         if (edgePostion == 'left') {
                             pageSolt.addOrMoveNode(node)
                             pageSolt.addOrMoveNode(overNode)
@@ -423,9 +419,9 @@ export class PageConfig implements IPageConfig {
             const deepCloneConfig = _.cloneDeep(props.config)
 
             if (CustomComponentConfig.IsCustomComponentConfigType(deepCloneConfig)) {
-                this.draggingNode = new CustomComponentConfig({ config: deepCloneConfig, parentId: this.id, appRoot: this.appRoot })
+                this.draggingNode = new CustomComponentConfig({ config: deepCloneConfig, parentId: this.id, appRoot: this.appRoot, pageRoot: this })
             } else {
-                this.draggingNode = new ComponentConfig({ config: deepCloneConfig, appRoot: this.appRoot })
+                this.draggingNode = new ComponentConfig({ config: deepCloneConfig, appRoot: this.appRoot, pageRoot: this })
             }
 
         } else {
@@ -498,6 +494,7 @@ export class ComponentConfig implements IComponentConfig {
     childSort: Array<ID> = []
 
     appRoot: AppConfig
+    pageRoot: PageConfig
 
     materialId: string
 
@@ -510,10 +507,11 @@ export class ComponentConfig implements IComponentConfig {
      * TODO: config 和 materialsConfig有功能重叠了！！！！
      * materialsConfig - 如果是custom 的 component ，我们需要提供一些预处理，并传入materialsConfig
      */
-    constructor({ config, appRoot, materialsConfig }: { config: IComponentConfig, appRoot: AppConfig, materialsConfig?: IComponentConfig<ArgConfig> }) {
+    constructor({ config, appRoot, pageRoot, materialsConfig }: { config: IComponentConfig, appRoot: AppConfig, pageRoot: PageConfig, materialsConfig?: IComponentConfig<ArgConfig> }) {
 
         this.parentId = config.parentId
         this.appRoot = appRoot
+        this.pageRoot = pageRoot
         this.type = config.type
         this.materialId = config.attrs.materialId
 
@@ -576,9 +574,9 @@ export class ComponentConfig implements IComponentConfig {
         // this.child 
         Object.entries(config.child || {}).forEach(([id, node]) => {
             if (CustomComponentConfig.IsCustomComponentConfigType(node)) {
-                this.child[id] = new CustomComponentConfig({ config: node, parentId: this.id, appRoot: this.appRoot })
+                this.child[id] = new CustomComponentConfig({ config: node, parentId: this.id, appRoot: this.appRoot, pageRoot: pageRoot })
             } else {
-                this.child[id] = new ComponentConfig({ config: node, appRoot: this.appRoot })
+                this.child[id] = new ComponentConfig({ config: node, appRoot: this.appRoot, pageRoot: pageRoot })
             }
         })
 
@@ -652,11 +650,35 @@ export class ComponentConfig implements IComponentConfig {
         this.rect = rect
     }
 
+    // 直接移除某个child，不管child是否存在子子child
     removeChildrenById(id: string) {
         if (id in this.child) {
             delete this.child[id]
             this.childSort = this.childSort.filter(idStr => idStr != id)
         }
+    }
+
+    // 移除自身节点，并深度清除所有child依赖
+    removeMyself() {
+        // 深度清除所有child依赖
+        if (this.child) {
+            Object.values(this.child).forEach(node => node.removeMyself())
+        }
+
+        this.child = {}
+        this.childSort = []
+
+        // 在其parent node中，把这个node移除
+        const parentNode = this.pageRoot.findElementById(this.parentId)
+        if (parentNode) {
+            parentNode.removeChildrenById(this.id)
+        }
+
+        this.parentId = ''
+
+        this.appRoot.event.dispatch('appdom.update', {})
+
+        // NOTE: 这个时候并没有被GC回收
     }
 
     // 把ArgConfig类型得props转换成key-value类型，喂给react组件
@@ -734,7 +756,7 @@ export class CustomComponentConfig extends ComponentConfig implements ICustomCom
         materialId: string;
     } & RecordStr<ArgConfig>;
 
-    constructor({ config, parentId, appRoot }: { config: ICustomComponentConfig, parentId: string, appRoot: AppConfig }) {
+    constructor({ config, parentId, appRoot, pageRoot }: { config: ICustomComponentConfig, parentId: string, appRoot: AppConfig, pageRoot: PageConfig }) {
 
 
         const componentConfig: IComponentConfig = {
@@ -744,7 +766,7 @@ export class CustomComponentConfig extends ComponentConfig implements ICustomCom
 
 
 
-        super({ config: componentConfig, appRoot, materialsConfig: componentConfig })
+        super({ config: componentConfig, appRoot, materialsConfig: componentConfig, pageRoot })
         // ICustomComponentConfig 和 CustomComponentConfig 区别：
         //     ICustomComponentConfig 没有
         //     parentId?: string;

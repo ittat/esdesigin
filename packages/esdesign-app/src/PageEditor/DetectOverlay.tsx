@@ -1,10 +1,13 @@
 import styled from "@emotion/styled"
-import { Box, Button, Typography } from "@mui/material"
+import { Box, Button, Stack, Typography } from "@mui/material"
 import { observer } from "mobx-react"
 import { CSSProperties, DragEvent, useCallback, useEffect, useReducer, useRef, useState } from "react"
 import { getPage, useAppDom } from "../Provider"
 import { ComponentConfig } from "../states/dom"
 import { Rectangle } from "../types"
+import DeleteIcon from '@mui/icons-material/Delete';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { pink } from "@mui/material/colors"
 
 
 
@@ -14,6 +17,8 @@ const OverlayRoot = styled('div')({
     position: 'relative',
     backgroundColor: 'blue'
 })
+
+
 
 
 
@@ -90,21 +95,17 @@ const OverlayDom = observer((props: { node: ComponentConfig, parentRect?: Rectan
 
     const nodeName = node.attrs.componentName.value || 'component'
 
-
-
     const rect = node.rect || pageApi.tryFindMyRectById(node.id)
 
+    const onDomDeleteHandler = useCallback(() => {
+        node.removeMyself()
+    }, [node])
 
 
 
     if (!rect) {
         console.warn("can not get the rect info of ", node.id);
-
-
         return <>^^^^^^6666666*******</>
-
-
-
     }
 
     const isSelected = pageApi.selectedNode?.id == node.id
@@ -185,15 +186,28 @@ const OverlayDom = observer((props: { node: ComponentConfig, parentRect?: Rectan
                         right: 0,
                         bottom: '100%',
                         backgroundColor: 'orangered',
-                        cursor: 'grab',
                         zIndex: zIndex + 1,
-                    }}
-                    draggable
-                    onDragStart={() => {
-                        pageApi.draggingStart({ type: 'EXIST', nodeId: node.id })
+                        display: 'flex',
+                        flexDirection: 'row',
+                        height: 20,
+                        padding: 3,
+                        paddingLeft: 8
                     }}
                 >
-                    <Typography variant='caption' noWrap>{nodeName}</Typography>
+
+                    <Typography
+                        variant='caption'
+                        noWrap
+                        sx={{ cursor: 'grab' }}
+                        draggable
+                        onDragStart={() => {
+                            pageApi.draggingStart({ type: 'EXIST', nodeId: node.id })
+                        }}
+                    >
+                        {nodeName}
+                    </Typography>
+                    <MoreVertIcon sx={{ color: pink[500] }} />
+                    <DeleteIcon color="action" onClick={onDomDeleteHandler} />
                 </div>
                 : null}
 
