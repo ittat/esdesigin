@@ -10,59 +10,59 @@ import { useParams } from "react-router-dom";
 import { createCustomComponentName } from "packages/esdesign-components/dist";
 
 
-const LoadingComp = ()=><>Loading...</>
+const LoadingComp = () => <>Loading...</>
 
-const CodeRuntimeCanvas = (props: { code: string }) => {
+const CodeRuntimeCanvas = (props: { dom?: IESDesiginComponent, code: string }) => {
     // const [BuildComp, setComponent] = useState<React.ComponentType>(LoadingComp)
 
-    const [_, updateUI] = useReducer((x) => x + 1, 0)
-    const virulDom = useRef<React.ComponentType | IESDesiginComponent>(LoadingComp)
+    // const [_, updateUI] = useReducer((x) => x + 1, 0)
+    // const virulDom = useRef<React.ComponentType | IESDesiginComponent>(LoadingComp)
 
-    const appdom = useAppDom()
-    const params  =   useParams()
+    // const appdom = useAppDom()
+    // const params  =   useParams()
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        const test = async () => {
+    //     const test = async () => {
 
-            const compiledModule = compileModule(props.code, 'sssss');
-            const { default: Component } = await loadModule(compiledModule);
-            
-            
-            virulDom.current = Component as IESDesiginComponent;
-            
-            // TODO: 问题，为什么不把customCompoent 转换成 Component？
-            if(params?.nodeId && (Component as IESDesiginComponent)?.EsDesginComponent){
-                const config = (Component as IESDesiginComponent).EsDesginComponent
-                console.log("ComponentComponentComponent,",config);
+    //         const compiledModule = compileModule(props.code, 'sssss');
+    //         const { default: Component } = await loadModule(compiledModule);
 
 
+    //         virulDom.current = Component as IESDesiginComponent;
 
-                // 将 config更新到 appdom的 customComponents 里面
-                const customComponentId = params.nodeId
-                const customConfig = config as ICustomComponentConfig<ArgConfig>
-                customConfig.attrs['source'] = {
-                    type: 1,
-                    value: props.code
-                }
-                customConfig.id = customComponentId
-                customConfig.attrs.materialId = createCustomComponentName(customComponentId)
-
-
-                appdom.addOrUpdateCustomElement(customConfig)
-            }
-            updateUI()
-        }
-
-        test()
-
-    }, [props.code])
+    //         // TODO: 问题，为什么不把customCompoent 转换成 Component？
+    //         if(params?.nodeId && (Component as IESDesiginComponent)?.EsDesginComponent){
+    //             const config = (Component as IESDesiginComponent).EsDesginComponent
+    //             console.log("ComponentComponentComponent,",config);
 
 
 
+    //             // 将 config更新到 appdom的 customComponents 里面
+    //             const customComponentId = params.nodeId
+    //             const customConfig = config as ICustomComponentConfig<ArgConfig>
+    //             customConfig.attrs['source'] = {
+    //                 type: 1,
+    //                 value: props.code
+    //             }
+    //             customConfig.id = customComponentId
+    //             customConfig.attrs.materialId = createCustomComponentName(customComponentId)
 
 
-    return <virulDom.current />
+    //             appdom.addOrUpdateCustomElement(customConfig)
+    //         }
+    //         updateUI()
+    //     }
+
+    //     test()
+
+    // }, [props.code])
+
+
+
+
+
+    return props.dom ? <props.dom /> : <LoadingComp />
 }
 
 export default CodeRuntimeCanvas

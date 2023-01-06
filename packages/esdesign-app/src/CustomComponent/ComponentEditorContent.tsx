@@ -1,7 +1,7 @@
-import { styled } from "@mui/material"
+import { Button, Stack, styled, Typography } from "@mui/material"
 import Box from "@mui/material/Box"
 import dynamic from "next/dynamic"
-import React, { useEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import ReactDOM from "react-dom"
 import CodeRuntimeCanvas from "./CodeRuntimeCanvas"
 import SplitPane from "../Layout/SplitPane"
@@ -10,6 +10,12 @@ import ErrorAlert from "../components/ErrorAlert"
 import { useRouter } from "next/router"
 import { useAppDom } from "../Provider"
 import { ExtraLib } from "../components/MonacoEditor"
+import loadModule, { compileModule } from "packages/esdesign-core/dist/loadModule"
+import { ArgConfig, ICustomComponentConfig, IESDesiginComponent } from "packages/esdesign-components/dist/types"
+import { useParams } from "react-router-dom"
+import { createCustomComponentName } from "packages/esdesign-components/dist"
+import build from "next/dist/build"
+import PropsPreviewPanel from "./PropsPreviewPanel"
 
 const TypescriptEditor = dynamic(() => import("../components/TypescriptEditor"), {
     ssr: false
@@ -19,8 +25,10 @@ const TypescriptEditor = dynamic(() => import("../components/TypescriptEditor"),
 
 const CanvasIframe = styled('iframe')({
     height: '100%',
-    width: '100%'
+    width: '100%',
+    border: 'none'
 })
+
 
 
 function RuntimeError({ error: runtimeError }: FallbackProps) {
@@ -51,8 +59,29 @@ const extraLibs: ExtraLib[] = [
     },
     {
         content: `declare module "https://*";`,
-      },
+    },
 ]
+
+const ButtonBan = (props: { onPreview?(): void, onSave?(): void }) => {
+
+    return <Stack sx={{
+        position: 'absolute',
+        bottom: 0,
+        right: 0,
+        height: '48px',
+        width: '100%',
+        backgroundColor: '#f5f5f5',
+        gap: 3,
+        px: 3,
+        py: 1,
+        boxSizing: 'border-box'
+    }} direction={'row'} justifyContent='flex-end' >
+        <Button variant='contained' onClick={props.onPreview}>Preview</Button>
+        <Button variant='outlined' onClick={props.onSave}>Update</Button>
+    </Stack>
+}
+
+
 
 const ComponentEditorContent = () => {
 
@@ -61,15 +90,67 @@ const ComponentEditorContent = () => {
 
     const [value, setValue] = useState(templator)
 
-    const router = useRouter()
+    const [previewData, setPreviewData] = useState<{
+        dom: IESDesiginComponent,
+        config: ICustomComponentConfig<ArgConfig>
+    }>()
+
+    // const router = useRouter()
 
     const appDom = useAppDom()
+
+    const params = useParams()
+
+    useEffect(() => {
+
+        const build = async () => {
+            const compiledModule = compileModule(value, 'sssss');
+            const { default: Component } = await loadModule(compiledModule);
+
+            // TODO: 问题，为什么不把customCompoent 转换成 Component？
+            if (params?.nodeId && (Component as IESDesiginComponent)?.EsDesginComponent) {
+                const previewDom = Component as IESDesiginComponent
+
+                const previewConfig = (Component as IESDesiginComponent).EsDesginComponent as ICustomComponentConfig<ArgConfig>
+
+                setPreviewData({
+                    dom: previewDom,
+                    config: previewConfig
+                })
+
+
+
+            }
+        }
+
+        build()
+    }, [value])
+
+
+    const onSaveToAppDomHandler = useCallback(() => {
+
+        if (!previewData) { return }
+        // 将 config更新到 appdom的 customComponents 里面
+        const { config } = previewData
+
+        const customComponentId = params.nodeId
+        const customConfig = config
+        customConfig.attrs['source'] = {
+            type: 1,
+            value: value
+        }
+        customConfig.id = customComponentId
+        customConfig.attrs.materialId = createCustomComponentName(customComponentId)
+
+
+        appDom.addOrUpdateCustomElement(customConfig)
+    }, [value, previewData, appDom])
 
 
 
     useEffect(() => {
-        const nodeId = router.query.index[3]
-        if (nodeId) {
+        if (params.nodeId) {
+            const nodeId = params.nodeId
             const elements = appDom.getCustomElements()
             const element = elements.find(e => e.node.id == nodeId)
 
@@ -77,7 +158,7 @@ const ComponentEditorContent = () => {
                 setValue(element.code)
             }
         }
-    }, [router.query])
+    }, [params])
 
 
     React.useEffect(() => {
@@ -98,7 +179,7 @@ const ComponentEditorContent = () => {
         <SplitPane split="vertical" allowResize size="50%">
             <TypescriptEditor
                 value={value}
-                onChange={()=>{}}
+                onChange={() => { }}
                 onSave={(newValue) => {
                     setValue(newValue)
                 }}
@@ -107,16 +188,19 @@ const ComponentEditorContent = () => {
             />
 
 
-
-
-
-
             <SplitPane split="horizontal" allowResize size="20%" primary="second">
-                <CanvasIframe
-                    ref={iframeRef}
-                    onLoad={onLoad}
-                />
-                <div>2</div>
+                <Box border={'5px solid #e7e7e7'} height={'100%'} boxSizing={'border-box'}>
+                    <Typography bgcolor={"#e7e7e7"} textAlign='center'>UI Preview</Typography>
+                    <CanvasIframe
+                        ref={iframeRef}
+                        onLoad={onLoad}
+                    />
+                </Box>
+                <React.Suspense fallback={null}>
+                    <ErrorBoundary resetKeys={[PropsPreviewPanel]} fallbackRender={RuntimeError}>
+                        <PropsPreviewPanel config={previewData?.config} />
+                    </ErrorBoundary>
+                </React.Suspense>
             </SplitPane>
 
         </SplitPane>
@@ -126,7 +210,7 @@ const ComponentEditorContent = () => {
             ReactDOM.createPortal((
                 <React.Suspense fallback={null}>
                     <ErrorBoundary resetKeys={[CodeRuntimeCanvas]} fallbackRender={RuntimeError}>
-                        <CodeRuntimeCanvas code={value} />
+                        <CodeRuntimeCanvas dom={previewData?.dom} code={value} />
                     </ErrorBoundary>
                 </React.Suspense>
 
@@ -134,7 +218,11 @@ const ComponentEditorContent = () => {
             : null
         }
 
+
+        <ButtonBan onPreview={() => { }} onSave={onSaveToAppDomHandler} />
+
     </Box>
 }
 
 export default ComponentEditorContent
+

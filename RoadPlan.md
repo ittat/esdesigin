@@ -5,9 +5,11 @@
       - mui 样式问题 - ?
 
 
+  CustomComponent 编辑界面 添加 运行按钮
+
  - ## 优先级低
    
-   CustomComponent 编辑界面UI
+
 
    完善 Setter Panel 
     
@@ -52,7 +54,6 @@ shema 导出导入
 
 props 的 required 标记
 
-monaco-editor 使用监听按键方法实现保存更新代码[here](https://microsoft.github.io/monaco-editor/playground.html#interacting-with-the-editor-listening-to-key-events)
 
 
 
@@ -76,6 +77,8 @@ Slot 组件适配
  - 解决 路由切换问题   
 
  2023-01-06
- - fix:  添加元素报错；future: 编辑器热键保存
+ - fix:  添加元素报错；future: 编辑器热键保存[here](https://microsoft.github.io/monaco-editor/playground.html#interacting-with-the-editor-listening-to-key-events)
  - feature: CustomComponent 的 config 提取分离
+ - feature: 完善 CustomComponent 编辑界面UI
+ - feature: 完善 CustomComponent 完善 props 预览区域
 
