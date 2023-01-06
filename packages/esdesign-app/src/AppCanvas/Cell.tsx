@@ -4,9 +4,9 @@ import { IComponentConfig, IESDesiginComponent } from "packages/esdesign-compone
 import React, { useReducer, useRef } from "react"
 import { useEffect, useMemo, useState } from "react"
 import { useAppDom, useMaterial } from "../Provider"
-import { ComponentConfig } from "../states/dom"
 import { RecordStr } from "../types"
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { ComponentConfig } from "../states/componentConfig"
 
 interface IProps {
     node: ComponentConfig

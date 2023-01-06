@@ -5,7 +5,8 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BrowserRouter, Routes, Navigate, Route } from "react-router-dom"
 import { __CANVAS_CONTROL_DETECT_OVERLAY__ } from '../globals';
 import { appConfigProvider, materialProvider, PageProvider } from '../Provider';
-import { AppConfig, PageConfig } from '../states/dom';
+import AppConfig from '../states/appConfig';
+import PageConfig from '../states/pageConfig';
 import { IHostYoube, IModules, RecordStr, Rectangle } from '../types';
 import Cavnas from './Cavnas';
 

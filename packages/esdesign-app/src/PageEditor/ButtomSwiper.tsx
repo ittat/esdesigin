@@ -15,7 +15,7 @@ import { getPage, useAppDom } from '../Provider';
 import { margin } from '@mui/system';
 import { DomNodeBase, IComponentConfig, ICustomComponentConfig } from 'packages/esdesign-components/dist/types';
 
-import { ComponentConfig } from '../states/dom';
+
 
 const drawerBleeding = 48;
 

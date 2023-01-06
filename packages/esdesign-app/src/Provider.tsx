@@ -1,7 +1,8 @@
 import React, { PropsWithChildren, useContext, useMemo } from "react"
 import { components, createCustomComponentName, types } from "@ittat/esdesign-components";
-import { AppConfig, PageConfig } from "./states/dom";
 import { IAppConfig, Types } from "packages/esdesign-components/dist/types";
+import AppConfig from "./states/appConfig";
+import PageConfig from "./states/pageConfig";
 
 export const appConfigProvider = React.createContext<{
     appDom: AppConfig | null,

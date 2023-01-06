@@ -5,10 +5,7 @@ import CanvasHost from "./CanvasHost"
 import ButtomSwiper from "./ButtomSwiper"
 import React, { useContext, useMemo, useState } from "react"
 import { useParams } from 'react-router-dom';
-
-import { useRouter } from "next/router"
 import { PageProvider, useAppDom } from "../Provider"
-import { PageConfig } from "../states/dom"
 import SetterPanel from "./SetterPanel/SetterPanel"
 
 const ComponentSetter = styled('div')({

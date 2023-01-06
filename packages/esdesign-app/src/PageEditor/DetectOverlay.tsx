@@ -3,11 +3,11 @@ import { Box, Button, Stack, Typography } from "@mui/material"
 import { observer } from "mobx-react"
 import { CSSProperties, DragEvent, useCallback, useEffect, useReducer, useRef, useState } from "react"
 import { getPage, useAppDom } from "../Provider"
-import { ComponentConfig } from "../states/dom"
 import { Rectangle } from "../types"
 import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { pink } from "@mui/material/colors"
+import { ComponentConfig } from "../states/componentConfig"
 
 
 
