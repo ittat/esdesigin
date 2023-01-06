@@ -3,7 +3,6 @@ import * as ReactDom from 'react-dom';
 import { CompiledModule } from './types';
 // import { codeFrameColumns } from '@babel/code-frame';
 import { transform, TransformResult } from 'sucrase';
-import * as muiMaterial from '@mui/material'
 
 
 async function resolveValues(input: Map<string, Promise<unknown>>): Promise<Map<string, unknown>> {
@@ -12,9 +11,11 @@ async function resolveValues(input: Map<string, Promise<unknown>>): Promise<Map<
 }
 
 async function createRequire(urlImports: string[]) {
-  const [{ default: muiMaterialExports },urlModules] = await Promise.all([
+  const [{ default: muiMaterialExports }, { default: coreExport }, urlModules] = await Promise.all([
     // @ts-ignore
     import('./muiExports'),
+    // @ts-ignore
+    import("./coreExport"),
     resolveValues(
       new Map(urlImports.map((url) => [url, import(/* webpackIgnore: true */ url)] as const)),
     ),
@@ -23,6 +24,7 @@ async function createRequire(urlImports: string[]) {
   const modules: Map<string, any> = new Map([
     ['react', React],
     ['react-dom', ReactDom],
+    ...coreExport,
     ...muiMaterialExports,
     ...urlModules,
   ]);
@@ -97,7 +99,7 @@ export function isAbsoluteUrl(maybeUrl: string) {
 }
 
 
-export  function compileModule(src: string, filename: string): CompiledModule {
+export function compileModule(src: string, filename: string): CompiledModule {
   const urlImports = findImports(src).filter((spec) => isAbsoluteUrl(spec));
 
   let compiled: TransformResult;
@@ -118,8 +120,8 @@ export  function compileModule(src: string, filename: string): CompiledModule {
     // }
     // return { error };
 
-    return  {
-      error:{
+    return {
+      error: {
         name: 'Error',
         message: 'sdasdasdsa'
       }

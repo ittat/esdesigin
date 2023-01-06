@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useContext, useMemo } from "react"
-import { components, types } from "@ittat/esdesign-components";
+import { components, createCustomComponentName, types } from "@ittat/esdesign-components";
 import { AppConfig, PageConfig } from "./states/dom";
 import { IAppConfig, Types } from "packages/esdesign-components/dist/types";
 
@@ -54,9 +54,9 @@ const tempConfig: IAppConfig = {
 
                         componentName: {
                             type: 1,
-                            value: 'Custom Component 1'
+                            value: 'Custom Component 2'
                         },
-                        materialId: 'customComponent.customComp2-id'
+                        materialId: createCustomComponentName('customComp2-id')
 
 
                     }
@@ -96,7 +96,7 @@ const tempConfig: IAppConfig = {
                                     type: 1,
                                     value: 'Custom Component 1'
                                 },
-                                materialId: 'customComponent.customComp2-id'
+                                materialId: createCustomComponentName('customComp2-id')
                             }
                         },
                     }
@@ -133,9 +133,9 @@ const tempConfig: IAppConfig = {
                             attrs: {
                                 componentName: {
                                     type: 1,
-                                    value: 'Custom Component 1'
+                                    value: 'Custom Component 3'
                                 },
-                                materialId: 'customComponent.customComp2-id'
+                                materialId: createCustomComponentName('customComp2-id')
                             }
                         },
                     }
@@ -155,7 +155,8 @@ const tempConfig: IAppConfig = {
                     value: `//import React from "https://esm.sh/react@18";
 import * as React from 'react';
 import  Botton from '@mui/material/Button';
-//import clone from "https://esm.sh/lodash/clone"
+//import clone from "https://esm.sh/lodash/clone";
+import { createEsDesginComponent } from "@esdesign/components";
 function Component1() {
   return (
       <Botton >Merry Xmas 🎄 🎄</Botton>
@@ -168,13 +169,23 @@ function myComponent() {
     <Component1 />
     </>);
  } 
- export default myComponent;  `
+
+//  export default myComponent;
+
+ export default createEsDesginComponent('myCustomComp1',myComponent, '', {
+    variant: {
+      type: 'string',
+      value: 'contained',
+      enums: ["", "text", "outlined", "contained"]
+    },
+  });  
+ `
                 },
                 componentName: {
                     type: 1,
-                    value: 'customComp2-id'
+                    value: 'myCustomComp1'
                 },
-                materialId: 'customComponent.customComp2-id'
+                materialId: createCustomComponentName('customComp2-id')
             }
         }
     }

@@ -1,6 +1,8 @@
 
 import { ReactNode } from "react";
 import { ESDESIGN_COMPONENT } from "./utils";
+
+
 export declare type IESDesiginComponent = React.ComponentType & {
     [ESDESIGN_COMPONENT]: IComponentConfig<ArgConfig>;
 };
@@ -145,6 +147,7 @@ export interface IPageConfig {
 export type ID = string
 
 export interface IComponentConfig<T = any> {
+    _type?:'builtIn' | 'custom',
     id: string,
     parentId: string;
     props?: RecordStr<T>;
@@ -170,6 +173,7 @@ export interface IComponentConfig<T = any> {
 //     childSort:undefined
 //     attrs.materialId
 export interface ICustomComponentConfig<T = any> extends IComponentConfig<T> {
+    _type?:'custom',
     parentId: string;
     child?: RecordStr<IComponentConfig>;
     sort?: Array<ID>;

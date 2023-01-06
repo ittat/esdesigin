@@ -5,7 +5,7 @@ export type ACTION_TYPES =
     | 'canvas.element.deleted'
     | 'appdom.update'
     | 'component.props.update'
-    | 'appdom.add.customComponents'
+    | 'appdom.add.or.update.customComponents'
     | 'appdom.add.page'
 
 export interface IEvent {

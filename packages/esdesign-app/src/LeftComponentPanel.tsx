@@ -13,6 +13,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getUUID } from "./globals";
+import { createCustomComponentName } from "packages/esdesign-components/dist";
 
 
 const LeftComponentPanel = () => {
@@ -32,13 +33,13 @@ const LeftComponentPanel = () => {
         }
         if (appDom) {
             appDom.event.addListener('appdom.update', farseUpdate)
-            appDom.event.addListener('appdom.add.customComponents', farseUpdate)
+            appDom.event.addListener('appdom.add.or.update.customComponents', farseUpdate)
             appDom.event.addListener('appdom.add.page', farseUpdate)
         }
 
         return () => {
             appDom?.event.removeListener('appdom.update', farseUpdate)
-            appDom?.event.removeListener('appdom.add.customComponents', farseUpdate)
+            appDom?.event.removeListener('appdom.add.or.update.customComponents', farseUpdate)
             appDom?.event.removeListener('appdom.add.page', farseUpdate)
         }
 
@@ -59,8 +60,8 @@ const LeftComponentPanel = () => {
         // 
         const id = getUUID()
         if (open.type == 'customComponent') {
-     
-            appDom.addcustomElement({
+
+            appDom.addOrUpdateCustomElement({
                 id: id,
                 type: '',
                 attrs: {
@@ -72,7 +73,7 @@ const LeftComponentPanel = () => {
                         type: 1,
                         value: open.name
                     },
-                    materialId: `customComponent.${id}`
+                    materialId: createCustomComponentName(id)
                 },
                 parentId: ""
             })
@@ -141,7 +142,7 @@ const LeftComponentPanel = () => {
                 <Button onClick={() => handleAskName('page')}>+</Button>
             </Stack>}>
 
-                {pages.map(page => <Link  key={page.id} to={`/app/appId/page/${page.id}`}>
+                {pages.map(page => <Link key={page.id} to={`/app/appId/page/${page.id}`}>
                     <TreeItem nodeId={page.id} label={page.pageName as string} />
                 </Link>)}
             </TreeItem>
@@ -160,8 +161,7 @@ const LeftComponentPanel = () => {
             </DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                    Let Google help apps determine location. This means sending anonymous
-                    location data to Google, even when no apps are running.
+                    TODO: Tips
                 </DialogContentText>
                 <TextField
                     autoFocus
@@ -191,4 +191,5 @@ const LeftComponentPanel = () => {
 
 
 export default LeftComponentPanel
+
 

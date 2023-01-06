@@ -1,7 +1,7 @@
 import { Box, Button, Stack } from '@mui/material';
 import * as React from 'react';
 import { ISoltProps } from '../types';
-import { createEsDesginComponent } from '../utils';
+import { createBuiltInComponent } from '../utils';
 import BlanksSoltTips from './BlanksSoltTips';
 
 
@@ -22,7 +22,7 @@ function PageRow(props: ISoltProps) {
 
 
 
-export default createEsDesginComponent(PageRow, 'slot', {
+export default createBuiltInComponent('PageRow',PageRow, 'slot', {
   justifyContent: {
     type: 'string',
     value: 'start',

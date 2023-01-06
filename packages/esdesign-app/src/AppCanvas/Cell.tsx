@@ -1,5 +1,5 @@
 import { Box, Typography, styled } from "@mui/material"
-import { ESDESIGN_COMPONENT, components, createEsDesginComponent } from "packages/esdesign-components/dist"
+import { ESDESIGN_COMPONENT, components, createBuiltInComponent } from "packages/esdesign-components/dist"
 import { IComponentConfig, IESDesiginComponent } from "packages/esdesign-components/dist/types"
 import React, { useReducer, useRef } from "react"
 import { useEffect, useMemo, useState } from "react"
@@ -35,7 +35,7 @@ const BlanksSoltTips = (props: { nodeid: string }) => {
 }
 
 
-const LoadingComponent = createEsDesginComponent(() => <Box>Loading...</Box>, '', {})
+const LoadingComponent = createBuiltInComponent('Loading',() => <Box>Loading...</Box>, '', {})
 
 
 

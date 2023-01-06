@@ -1,7 +1,7 @@
 import { Box, Button, Stack } from '@mui/material';
 import * as React from 'react';
 import { ISoltProps } from '../types';
-import { createEsDesginComponent } from '../utils';
+import { createBuiltInComponent } from '../utils';
 
 
 function PageRoot(props: ISoltProps) {
@@ -17,4 +17,4 @@ function PageRoot(props: ISoltProps) {
 
 
 
-export default createEsDesginComponent(PageRoot, 'slot', {});  
+export default createBuiltInComponent('PageRoot',PageRoot, 'slot', {});  

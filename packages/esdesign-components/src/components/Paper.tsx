@@ -1,7 +1,7 @@
 import { Paper as P, styled, Box, Typography } from '@mui/material';
 import * as React from 'react';
 import { ISoltProps } from '../types';
-import { createEsDesginComponent } from '../utils';
+import { createBuiltInComponent } from '../utils';
 import BlanksSoltTips from './BlanksSoltTips';
 
 function Paper(props: ISoltProps) {
@@ -19,4 +19,4 @@ function Paper(props: ISoltProps) {
 
 
 
-export default createEsDesginComponent(Paper, 'slot', {});  
+export default createBuiltInComponent('Paper', Paper, 'slot', {});  

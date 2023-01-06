@@ -1,7 +1,7 @@
 import { Box, Button, Stack } from '@mui/material';
 import * as React from 'react';
 import { ISoltProps } from '../types';
-import { createEsDesginComponent } from '../utils';
+import { createBuiltInComponent } from '../utils';
 import BlanksSoltTips from './BlanksSoltTips';
 
 
@@ -19,7 +19,7 @@ function PageColumn(props: ISoltProps) {
 
 
 
-export default createEsDesginComponent(PageColumn, 'slot', {
+export default createBuiltInComponent('PageColumn',PageColumn, 'slot', {
   alignItems: {
     type: 'string',
     value: 'unset',

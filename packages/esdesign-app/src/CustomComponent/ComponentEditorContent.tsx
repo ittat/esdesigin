@@ -28,8 +28,8 @@ function RuntimeError({ error: runtimeError }: FallbackProps) {
 }
 
 const templator = `
-//import * as React from 'react';
-import React from "https://esm.sh/react@18"
+import * as React from 'react';
+//import React from "https://esm.sh/react@18"
 function myComponent() {
   return (
     <div style={{fontSize:'30px'}} >lalalalalla</div>

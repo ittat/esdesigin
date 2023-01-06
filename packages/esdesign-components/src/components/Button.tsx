@@ -2,7 +2,7 @@ import { Button as B } from '@mui/material';
 import * as React from 'react';
 import { disabledConfig, MUIColorConfig, MUIfullWidthConfig, MUISizeConfig } from '../argCommons';
 import { ICommonProps } from '../types';
-import { createEsDesginComponent, filterProps } from '../utils';
+import { createBuiltInComponent, filterProps } from '../utils';
 
 
 function Button(props: ICommonProps) {
@@ -22,7 +22,7 @@ function Button(props: ICommonProps) {
 
 
 
-export default createEsDesginComponent(Button, '', {
+export default createBuiltInComponent('Button',Button, '', {
   text: {
     type: 'string',
     value: 'button'

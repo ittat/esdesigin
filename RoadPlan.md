@@ -4,6 +4,7 @@
     CustomComponent 的依赖引入问题
       - mui 样式问题 - ?
 
+
  - ## 优先级低
    
    CustomComponent 编辑界面UI
@@ -15,9 +16,12 @@
  - ## 逻辑问题
 
     
-    CustomComponent 的依赖引入问题 
+   
 
     setter 的动态绑定逻辑 、表达式逻辑、scope 获取逻辑
+
+
+     问题，为什么不把customCompoent 转换成 Component？
 
 
 # 正在排期
@@ -30,7 +34,7 @@ component List 不在左侧显示（改成在底部抽屉）
 
 Editor 插件性能问题
 
-CustomComponent 的 config 提取分离
+
 
  AppsOverView 实现
 
@@ -73,4 +77,5 @@ Slot 组件适配
 
  2023-01-06
  - fix:  添加元素报错；future: 编辑器热键保存
+ - feature: CustomComponent 的 config 提取分离
 
