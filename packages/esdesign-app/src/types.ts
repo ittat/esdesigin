@@ -1,6 +1,8 @@
 import { types } from "@ittat/esdesign-components";
 import { IArgsConfigs, IPropsConfig } from "packages/esdesign-components/dist/types";
-import  { AppConfig, PageConfig } from "./states/dom";
+import AppConfig from "./states/appConfig";
+import PageConfig from "./states/pageConfig";
+
 
 export type IModules = Record<string, types.IESDesiginComponent>
 
@@ -8,8 +10,8 @@ export interface IHostYoube {
     hostDom: AppConfig,
     pageApi: PageConfig,
     ondomTreeUpdate?(rects:RecordStr<Rectangle>):void,
-
-    test: any
+    previewMode?:boolean
+    test?: any
 }
 
 export  interface Rectangle {

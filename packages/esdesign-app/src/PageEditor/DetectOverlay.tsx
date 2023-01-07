@@ -315,7 +315,6 @@ const DetectOverlay = () => {
         pageApi.placeDraggingNode('bottom')
     }
 
-
     return <OverlayRoot
         style={{
             height: '100%',

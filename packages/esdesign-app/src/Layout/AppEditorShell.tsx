@@ -50,7 +50,7 @@ const AppEditorShell = () => {
                         // endIcon={<OpenInNewIcon />}
                         color="primary"
                         component="a"
-                        href={`/app/appId/preview`}
+                        href={`/preview/appid/page/d23d2d-4g45-2d21d-h44`}
                         target="_blank"
                     >
                         Preview

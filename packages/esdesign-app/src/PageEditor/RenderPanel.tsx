@@ -57,7 +57,7 @@ const RenderPanel = () => {
         <RenderPanelContainer>
             <SplitPane split="vertical" allowResize size="70%">
                 <div style={{ width: '100%', position: 'relative', height: '100%' }}>
-                    <CanvasHost />
+                    <CanvasHost previewMode={false}/>
                     <ButtomSwiper />
                 </div>
                 <ComponentSetter>

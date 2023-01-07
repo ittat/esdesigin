@@ -35,7 +35,7 @@ export default class AppConfig implements IAppConfig {
         this.customComponents = appConfig.customComponents
 
         // @ts-ignore
-        window.appdom = this
+        // window.appdom = this
 
 
         // pages

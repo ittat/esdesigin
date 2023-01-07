@@ -27,22 +27,42 @@ const CanvasFrame = styled('iframe')({
 
 
 
-const CanvasHost = () => {
+const CanvasHost = (props: { previewMode?: boolean }) => {
 
     const frameRef = useRef<HTMLIFrameElement>(null);
 
+    // TODO isLoading  frameLoad hebing
     const [isLoading, setIsLoading] = useState(true);
+    const [frameLoad, setFrameLoad] = useState(false)
 
     const [canvasWindow, setCanvasWindow] = useState<Window | null>(null);
-
     const [detectOverlay, setDetectOverlay] = useState<HTMLElement | null>(null);
+    
 
     const appDom = useAppDom()
-
     const page = getPage()
 
 
+    // fix; 解决preview模式下 iframe 不发送onload事件问题，原因未知
+    useEffect(() => {
+        if (frameRef.current && !frameLoad && props.previewMode) {
+            handleFrameLoad()
+        }
+
+    }, [frameRef.current, frameLoad])
+
+    useEffect(()=>{
+        return ()=>{
+            setFrameLoad(false)
+
+        }
+    },[])
+
     const handleFrameLoad = () => {
+        if (frameLoad) { return }
+
+        // setFrameLoad(true)
+
 
         invariant(frameRef.current, 'Iframe ref not attached');
 
@@ -50,43 +70,31 @@ const CanvasHost = () => {
         // setContentWindow(iframeWindow);
         setIsLoading(false)
 
-        if (!iframeWindow) {
-            return;
-        }
+        if (!iframeWindow) { return }
 
         setCanvasWindow(iframeWindow)
 
 
-        // @ts-ignore
         iframeWindow.__ESYOUBE__ = {
             hostDom: appDom,
-            pageApi: page
+            pageApi: page,
+            previewMode: props.previewMode || false
         }
 
-        // const keyDownHandler = iframeKeyDownHandler(iframeWindow.document);
-        const keyDownHandler = () => {
-            console.log('canvas - keyDownHandler');
 
-        }
 
-        const onclick = () => {
-            console.log('canvas - onclick');
+        props.previewMode && iframeWindow.__ESYOUBE_injured_?.()
 
-        }
-        iframeWindow?.addEventListener('keydown', keyDownHandler);
-        iframeWindow?.addEventListener('click', onclick);
-        iframeWindow?.addEventListener('unload', () => {
-            iframeWindow?.removeEventListener('keydown', keyDownHandler);
-            iframeWindow?.removeEventListener('keydown', onclick);
-        });
+
+        // iframeWindow?.addEventListener('unload', () => { });
     }
 
 
     useEffect(() => {
-        if (canvasWindow) {
-            const overlayDom = canvasWindow.document.getElementById(__CANVAS_CONTROL_DETECT_OVERLAY__)
+        if (!props.previewMode && canvasWindow) {
+          
             setTimeout(() => {
-
+                const overlayDom = canvasWindow.document.getElementById(__CANVAS_CONTROL_DETECT_OVERLAY__)
                 overlayDom && setDetectOverlay(overlayDom)
             }, 1500)
 
@@ -94,6 +102,7 @@ const CanvasHost = () => {
 
     }, [canvasWindow])
 
+ 
 
     return (
         <CanvasRoot
@@ -113,8 +122,8 @@ const CanvasHost = () => {
                 onLoad={handleFrameLoad}
 
                 src={`/canvas/appId/page/${page.id}`}
-                // Used by the runtime to know when to load react devtools
-                data-toolpad-canvas
+            // Used by the runtime to know when to load react devtools
+            // data-toolpad-canvas
             />
 
             {detectOverlay ?

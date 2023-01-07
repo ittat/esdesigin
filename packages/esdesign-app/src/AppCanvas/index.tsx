@@ -23,6 +23,7 @@ export interface IAppCanvasProps {
 declare global {
     interface Window {
         __ESYOUBE__?: IHostYoube;
+        __ESYOUBE_injured_?(): void;
     }
 }
 
@@ -61,11 +62,12 @@ const AppCanvas = (props: IAppCanvasProps) => {
 
     const [hostDom, setHostDom] = useState<AppConfig | null>(null)
     const [pageApi, setPageApi] = useState<PageConfig | null>(null)
+    const [preview, setPreview] = useState<boolean>(false)
 
     const appRootRef = useRef<HTMLDivElement>();
     const appRootCleanupRef = useRef<() => void>();
 
-    const appRects = useRef< RecordStr<Rectangle>>({});
+    const appRects = useRef<RecordStr<Rectangle>>({});
 
     const materials = useMemo(() => {
         const results: Record<string, types.IESDesiginComponent> = {}
@@ -76,20 +78,32 @@ const AppCanvas = (props: IAppCanvasProps) => {
         return results
     }, [])
 
-
+    // fix: for  non preview mode
     useEffect(() => {
-        if (window.__ESYOUBE__ && materials) {
-            const { pageApi, hostDom } = window.__ESYOUBE__
+        if (window.__ESYOUBE__ && materials) { initEsYoubeInfo() }
+    }, [materials])
+
+    // fix: for preview mode
+    useEffect(() => {
+        window.__ESYOUBE_injured_ = () => { initEsYoubeInfo() }
+    }, [])
+
+    const initEsYoubeInfo = () => {
+        if (window.__ESYOUBE__) {
+            const { pageApi, hostDom, previewMode = false } = window.__ESYOUBE__
             setHostDom(hostDom)
             setPageApi(pageApi)
-
-
+            setPreview(previewMode)
         }
-    }, [materials])
+    }
+
+
+
 
 
     const onAppRoot = useCallback((cavnasRootRef: HTMLDivElement) => {
         console.log("进入onAppRoot");
+        if (preview) { return }
 
         appRootCleanupRef.current?.();
         appRootCleanupRef.current = undefined;
@@ -128,15 +142,14 @@ const AppCanvas = (props: IAppCanvasProps) => {
 
 
     const handleScreenUpdate = useCallback(() => {
+        console.log("handleScreenUpdate!", preview);
 
-        console.log('handleScreenUpdate!');
-        
+
+        if (preview) { return }
+
         const allElem = document.getElementsByClassName('node-element')
         const allSoltArea = document.getElementsByClassName('blanks-solt-tips-area')
 
-        console.log("allSoltArea!!!!",allSoltArea);
-
-        
         const elemRects: RecordStr<Rectangle> = {}
         const slotRects: RecordStr<Rectangle> = {}
 
@@ -151,7 +164,7 @@ const AppCanvas = (props: IAppCanvasProps) => {
             }
         }
 
-        if(allSoltArea.length){
+        if (allSoltArea.length) {
             for (const elem of allSoltArea) {
                 const rect = elem.getBoundingClientRect()
                 // @ts-ignore
@@ -167,33 +180,46 @@ const AppCanvas = (props: IAppCanvasProps) => {
         appRects.current = elemRects
 
 
-        const { pageApi } = window.__ESYOUBE__
-        pageApi.updateRects(elemRects,slotRects)
+
+        // if (pageApi) {
+        //     pageApi.updateRects(elemRects, slotRects)
+        // }
+
+        if (window.__ESYOUBE__) {
+            const { pageApi, hostDom } = window.__ESYOUBE__
+            pageApi && pageApi.updateRects(elemRects, slotRects)
+            hostDom && hostDom.event.dispatch('appdom.update', {})
+        }
+
+
+        // if (hostDom) {
+        //     console.log("xcihu235");
+
+        //     hostDom.event.dispatch('appdom.update', {})
+        // }
+
+
+    }, [hostDom, pageApi, preview])
 
 
 
-        if (!hostDom) { return }
 
-        hostDom.event.dispatch('appdom.update', {})
-
-    }, [hostDom,pageApi])
-
-
-
-
-    return <appConfigProvider.Provider value={{ appDom: hostDom }}>
-        <materialProvider.Provider value={{ materials: materials }}>
-            <PageProvider.Provider value={{ page: pageApi }}>
-                <ThemeProvider theme={darkTheme}>
-                    <AppRoot ref={onAppRoot}>
-                        <Cavnas pageId={props.pageProps.pageId} />
-                        {/* Host加载overlay组件使用的的锚点 */}
-                        <ControlDetectOverlay id={__CANVAS_CONTROL_DETECT_OVERLAY__} />
-                    </AppRoot>
-                </ThemeProvider>
-            </PageProvider.Provider>
-        </materialProvider.Provider>
-    </appConfigProvider.Provider>
+    return <NoSsr>
+        <appConfigProvider.Provider value={{ appDom: hostDom }}>
+            <materialProvider.Provider value={{ materials: materials }}>
+                <PageProvider.Provider value={{ page: pageApi }}>
+                    <ThemeProvider theme={darkTheme}>
+                        <AppRoot ref={onAppRoot}>
+                            {/* TODO: 改用react-router */}
+                            <Cavnas pageId={props.pageProps.pageId} />
+                            {/* Host加载overlay组件使用的的锚点 */}
+                            {preview ? null : <ControlDetectOverlay id={__CANVAS_CONTROL_DETECT_OVERLAY__} />}
+                        </AppRoot>
+                    </ThemeProvider>
+                </PageProvider.Provider>
+            </materialProvider.Provider>
+        </appConfigProvider.Provider>
+    </NoSsr>
 
 }
 

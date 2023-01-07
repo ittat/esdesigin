@@ -7,6 +7,7 @@
     - AppsOverView 实现
     - setter 的动态绑定逻辑 、表达式逻辑、scope 获取逻辑
     - Setter 补全props 类型编辑
+    - bug parent can drop into his child!!!!
 
  - ### 优先级低
    
@@ -29,7 +30,7 @@
   - Editor 插件性能问题
   - Left panel UI
   - 实现 grid 组件 
-
+  - save to loaction
 
 
 
@@ -41,6 +42,8 @@
   - 界面样式
   - props 的 required 标记
   - 拓展Antd 功能
+  - cavnas 有不同分辨率的效果 - https://mui.com/material-ui/react-toggle-button/#enforce-value-set
+  - 添加右击菜单 [here](https://mui.com/material-ui/react-menu/#context-menu)
 
 
 
