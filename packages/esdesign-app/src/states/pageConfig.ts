@@ -139,6 +139,14 @@ export default class PageConfig implements IPageConfig {
             return
         }
 
+        // 如果dargging node 是 node 的子组件、子子组件，不允许选中drag over  node
+        if(this.draggingNode && !!this.draggingNode.findElementById(node.id)){
+            this.drogOverNode = undefined
+            return
+
+        }
+
+
         // 不能draggingNode和drogOverNode是同一个Node
         if (this.draggingNode && this.draggingNode.id == node.id) {
             console.warn('出问题了：setDrogOverNode');
@@ -146,6 +154,8 @@ export default class PageConfig implements IPageConfig {
             return
         }
 
+
+        console.log("setDrogOverNodesetDrogOverNodesetDrogOverNode");
         this.drogOverNode = node
 
 

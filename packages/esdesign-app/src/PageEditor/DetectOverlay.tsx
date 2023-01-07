@@ -113,6 +113,14 @@ const OverlayDom = observer((props: { node: ComponentConfig, parentRect?: Rectan
 
     const onDragOverHandler = (event: DragEvent<HTMLDivElement>) => {
         pageApi.setDrogOverNode(node)
+
+        // 如果dargging node 是 node 的子组件、子子组件，不允许选中drag over  node
+        if (pageApi.draggingNode && !!pageApi.draggingNode.findElementById(node.id)) {
+            setInsertBound(undefined)
+            return
+
+        }
+
         // 如果没有node没有计算出位置信息rect，返回
         if (!node.rect) { return }
         // 如果 dragNode == overNode ，返回

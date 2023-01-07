@@ -4,16 +4,19 @@
     - CustomComponent 的依赖引入问题
       - mui 样式问题 - ?
 
-    - AppsOverView 实现
-    - setter 的动态绑定逻辑 、表达式逻辑、scope 获取逻辑
+
     - Setter 补全props 类型编辑
-    - bug parent can drop into his child!!!!
+    - setter 的动态绑定逻辑 、表达式逻辑、scope 获取逻辑
+    - query 
+
+    
 
  - ### 优先级低
    
 
    - 完善 Setter Panel 
    - CustomComponent 编辑界面 异常处理
+   - AppsOverView 实现
     
 
     
@@ -75,3 +78,5 @@ Slot 组件适配
  - feature: 实现 CustomComponent 编辑界面 添加 运行按钮
  - feature: 实现 canvas 元素删除
 
+2023-01-07
+  - bug parent can drop into his child!!!!
