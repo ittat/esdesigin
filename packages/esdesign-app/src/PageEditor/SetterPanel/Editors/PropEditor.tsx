@@ -10,6 +10,8 @@ import StringEditor from "./StringEditor";
 import SelectEditor from "./SelectEditor";
 import { observer } from "mobx-react";
 import BooleanEditor from "./BooleanEditor";
+import NumberEditor from "./NumberEditor";
+import JSONEditor from "./JSONEditor";
 
 
 const PropBindControl = (props: { sx?: SxProps<Theme> }) => {
@@ -58,11 +60,17 @@ const PropEditor = (props: IProps) => {
         if (config.type == 'string') {
 
             return config.enums ? <SelectEditor {...commonProps} config={config} /> : <StringEditor {...commonProps} config={config} />
-        }else if(config.type == 'boolean'){
-            return <BooleanEditor  {...commonProps} config={config}/>
+        } else if (config.type == 'boolean') {
+            return <BooleanEditor  {...commonProps} config={config} />
+        } else if (config.type == 'number') {
+            return <NumberEditor  {...commonProps} config={config} />
+        } else if (config.type == 'event') {
+            // 事件类型没有只有绑定按钮
+            return <></>
+        } else {
+            return <JSONEditor  {...commonProps} config={config} />
         }
 
-        return <></>
 
 
     }, [config])

@@ -4,8 +4,12 @@
     - CustomComponent 的依赖引入问题
       - mui 样式问题 - ?
 
+  - 补充 textfiled组件
+      - date
+      - color
+      - password
 
-    - Setter 补全props 类型编辑
+
     - setter 的动态绑定逻辑 、表达式逻辑、scope 获取逻辑
     - query 
 
@@ -80,3 +84,4 @@ Slot 组件适配
 
 2023-01-07
   - bug parent can drop into his child!!!!
+  - Setter 补全props 类型编辑
