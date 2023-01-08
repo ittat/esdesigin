@@ -11,7 +11,7 @@ export const MUISizeConfig = {
 export const MUIColorConfig = {
     color: {
         type: 'string',
-        value: 'inherit',
+        value: 'primary',
         enums: ["inherit", "primary", "secondary", "success", "error", "info", "warning"]
     } as ArgConfig
 }

@@ -32,7 +32,7 @@ const tempConfig: IAppConfig = {
         'd23d2d-4g45-2d21d-h44': {
             id: 'd23d2d-4g45-2d21d-h44',
             pageName: 'page 1',
-            sort: ['asdas-fdsf234-23423we4-ewsrwe234', 'customComp1-id', 'element1', 'sdfrf34-4sdf43-sdfd234-few234-ewr'],
+            sort: ['asdas-fdsf234-23423we4-ewsrwe234', 'customComp1-id', 'element1', 'sdfrf34-4sdf43-sdfd234-few234-ewr','d3f-d3'],
             domTree: {
                 'element1': {
                     id: 'element1',
@@ -140,7 +140,24 @@ const tempConfig: IAppConfig = {
                             }
                         },
                     }
-                }
+                },
+                'd3f-d3': {
+                    id: 'd3f-d3',
+                    parentId: 'd23d2d-4g45-2d21d-h44',
+                    type: '',
+                    props: {
+                        label: 'textField',
+                        value: '',
+                        placeholder: 'placeholder...',
+                    },
+                    attrs: {
+                        componentName: {
+                            type: 1,
+                            value: 'input test '
+                        },
+                        materialId: 'Input'
+                    }
+                },
 
             },
         }

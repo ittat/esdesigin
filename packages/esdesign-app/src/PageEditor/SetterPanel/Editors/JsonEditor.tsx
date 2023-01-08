@@ -1,7 +1,12 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
-import MonacoEditor from "packages/esdesign-app/src/components/MonacoEditor";
+import dynamic from "next/dynamic";
+
 import { types } from "packages/esdesign-components/dist";
 import { useCallback, useState } from "react";
+
+const MonacoEditor = dynamic(() => import("../../../components/MonacoEditor"), {
+    ssr: false
+})
 
 
 const JSONEditor = (props: { config: types.ArgJsonConfig, name: string, onChange?(value?: Array<any> | object): void }) => {

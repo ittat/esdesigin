@@ -50,9 +50,9 @@ const ControlDetectOverlay = styled('div')({
 })
 
 const darkTheme = createTheme({
-    palette: {
-        mode: 'dark',
-    },
+    // palette: {
+    //     mode: 'dark',
+    // },
 });
 
 
@@ -188,7 +188,8 @@ const AppCanvas = (props: IAppCanvasProps) => {
         if (window.__ESYOUBE__) {
             const { pageApi, hostDom } = window.__ESYOUBE__
             pageApi && pageApi.updateRects(elemRects, slotRects)
-            hostDom && hostDom.event.dispatch('appdom.update', {})
+            // 移除没有发现影响 - 23-1-8
+            // hostDom && hostDom.event.dispatch('appdom.update', {})
         }
 
 

@@ -11,7 +11,7 @@ import SelectEditor from "./SelectEditor";
 import { observer } from "mobx-react";
 import BooleanEditor from "./BooleanEditor";
 import NumberEditor from "./NumberEditor";
-import JSONEditor from "./JSONEditor";
+import JSONEditor from "./JsonEditor";
 
 
 const PropBindControl = (props: { sx?: SxProps<Theme> }) => {

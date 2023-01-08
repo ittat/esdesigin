@@ -194,7 +194,8 @@ export default class PageConfig implements IPageConfig {
             // 添加新的联系
             this.drogOverNode.addOrMoveNode(this.draggingNode)
 
-            this.appRoot.event.dispatch('appdom.update', {})
+            // 移除没有发现影响 - 23-1-8
+            // this.appRoot.event.dispatch('appdom.update', {})
             this.draggingNode = undefined
             this.drogOverNode = undefined
             return

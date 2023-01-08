@@ -4,6 +4,7 @@ import PageColumn from './PageColumn'
 import PageRow from './PageRow'
 import PageRoot from './PageRoot'
 import Paper from './Paper'
+import Input from './Input'
 
 export default {
     Button,
@@ -11,5 +12,6 @@ export default {
     PageColumn,
     PageRow,
     PageRoot,
-    Paper
+    Paper,
+    Input
 }

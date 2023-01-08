@@ -35,7 +35,7 @@ const BlanksSoltTips = (props: { nodeid: string }) => {
 }
 
 
-const LoadingComponent = createBuiltInComponent('Loading',() => <Box>Loading...</Box>, '', {})
+const LoadingComponent = createBuiltInComponent('Loading', () => <Box>Loading...</Box>, '', {})
 
 
 
@@ -64,26 +64,27 @@ const Cell = (props: IProps) => {
     useEffect(() => {
         getDom()
 
-        function checkProps(event,data:{ id: string, name:string, oldValue:any, value:any}){
+        function checkProps(event, data: { id: string, name: string, oldValue: any, value: any }) {
 
-            if(data.id == node.id){
+            if (data.id == node.id) {
                 updateUI()
             }
         }
 
-        setTimeout(() => appApi.event.dispatch('appdom.update', {}))
+        // 移除没有发现影响 - 23-1-8
+        // setTimeout(() => appApi.event.dispatch('appdom.update', {}))
 
-        appApi.event.addListener('component.props.update',checkProps)
+        appApi.event.addListener('component.props.update', checkProps)
 
-        return ()=>{
-            appApi.event.removeListener('component.props.update',checkProps)
+        return () => {
+            appApi.event.removeListener('component.props.update', checkProps)
         }
     }, [])
 
 
 
     const cleanProps = node.getProps()
-    
+
 
     return <Box className={`node-element`} data-node={node} data-nodeid={node.id} >
 

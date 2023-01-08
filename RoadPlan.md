@@ -1,26 +1,26 @@
 # 正在实现
  - ### 优先级高
 
-    - CustomComponent 的依赖引入问题
+
+  
+  - 完成props 事件绑定
+  
+  - setter 的动态绑定逻辑 、表达式逻辑、scope 获取逻辑
+ 
+  - query 
+
+  - CustomComponent 的依赖引入问题
       - mui 样式问题 - ?
 
-  - 补充 textfiled组件
-      - date
-      - color
-      - password
 
-
-    - setter 的动态绑定逻辑 、表达式逻辑、scope 获取逻辑
-    - query 
 
     
 
  - ### 优先级低
-   
 
    - 完善 Setter Panel 
    - CustomComponent 编辑界面 异常处理
-   - AppsOverView 实现
+   - AppsOverView 完善
     
 
     
@@ -85,3 +85,6 @@ Slot 组件适配
 2023-01-07
   - bug parent can drop into his child!!!!
   - Setter 补全props 类型编辑
+
+2023-01-08
+  - feature: 补充 textfiled组件

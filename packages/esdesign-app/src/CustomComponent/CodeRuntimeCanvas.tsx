@@ -3,7 +3,7 @@ import { compileModule } from "packages/esdesign-core/dist";
 import loadModule from "packages/esdesign-core/dist/loadModule";
 import React, { useReducer, useRef } from "react";
 import { useEffect, useState } from "react";
-import { Box, Typography, styled } from "@mui/material"
+import { Box, Typography, styled, ThemeProvider, createTheme } from "@mui/material"
 import { ArgConfig, ICustomComponentConfig, IESDesiginComponent } from "packages/esdesign-components/dist/types";
 import { useAppDom } from "../Provider";
 import { useParams } from "react-router-dom";
@@ -11,6 +11,13 @@ import { createCustomComponentName } from "packages/esdesign-components/dist";
 
 
 const LoadingComp = () => <>Loading...</>
+
+const darkTheme = createTheme({
+    palette: {
+        mode: 'dark',
+    },
+});
+
 
 const CodeRuntimeCanvas = (props: { dom?: IESDesiginComponent, code: string }) => {
     // const [BuildComp, setComponent] = useState<React.ComponentType>(LoadingComp)
@@ -62,7 +69,10 @@ const CodeRuntimeCanvas = (props: { dom?: IESDesiginComponent, code: string }) =
 
 
 
-    return props.dom ? <props.dom /> : <LoadingComp />
+    return <ThemeProvider theme={darkTheme}>
+        {props.dom ? <props.dom /> : <LoadingComp />}
+    </ThemeProvider>
+
 }
 
 export default CodeRuntimeCanvas

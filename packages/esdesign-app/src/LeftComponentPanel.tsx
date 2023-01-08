@@ -1,5 +1,5 @@
 import { TreeItem, TreeView } from "@mui/lab"
-import { Box, Button, TextField } from "@mui/material"
+import { Box, Button, IconButton, ListItem, ListItemText, TextField } from "@mui/material"
 import { Link, useNavigate } from "react-router-dom"
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
@@ -14,6 +14,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getUUID } from "./globals";
 import { createCustomComponentName } from "packages/esdesign-components/dist";
+import EditIcon from '@mui/icons-material/Edit';
 
 
 const LeftComponentPanel = () => {
@@ -143,7 +144,24 @@ function myComponent() {
             }}
             bgcolor='grey.100'
         >
-            LeftComponentPanel
+          
+            <ListItem
+            secondaryAction={
+                <IconButton edge="end" aria-label="add">
+                    <EditIcon />
+                </IconButton>
+            }
+        >
+            <ListItemText
+                sx={{ my: 0, mx: 1 }}
+                primary="App Name"
+                primaryTypographyProps={{
+                    fontSize: 20,
+                    fontWeight: 'small',
+                    letterSpacing: 0,
+                }}
+            />
+        </ListItem>
         </Box>
         <TreeView
             aria-label="gmail"
