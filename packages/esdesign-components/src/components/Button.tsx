@@ -8,9 +8,8 @@ import { createBuiltInComponent, filterProps } from '../utils';
 function Button(props: ICommonProps) {
 
   const text = props.text || 'Button'
-  
 
-  const clearProps = filterProps(props,['text','children'])
+  const clearProps = filterProps(props, ['text', 'children'])
 
   return (
     <B  {...clearProps}>
@@ -22,15 +21,26 @@ function Button(props: ICommonProps) {
 
 
 
-export default createBuiltInComponent('Button',Button, '', {
+export default createBuiltInComponent('Button', Button, '', {
   text: {
     type: 'string',
-    value: 'button'
+    value: 'button',
+    action:{
+      type:'JSExpression',
+      value:'"get me"'
+    }
   },
   variant: {
     type: 'string',
     value: 'contained',
     enums: ["", "text", "outlined", "contained"]
+  },
+  onClick: {
+    type: 'event',
+    action:{
+      type:'JSExpression',
+      value:'console.log("ohhhhhh! yeah!")'
+    }
   },
   ...MUISizeConfig,
   ...MUIColorConfig,

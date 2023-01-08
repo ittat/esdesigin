@@ -21,7 +21,7 @@ const NumberEditor = (props: { config: types.ArgNumberConfig, name: string, onCh
             type={'number'}
             fullWidth
             value={value ?? ''}
-            // disabled={disabled}
+            disabled={!!config.action}
             onChange={handleChange}
             label={props.name}
             size='small'

@@ -90,13 +90,12 @@ const AppCanvas = (props: IAppCanvasProps) => {
 
     const initEsYoubeInfo = () => {
         if (window.__ESYOUBE__) {
-            const { pageApi, hostDom, previewMode = false } = window.__ESYOUBE__
+            const { pageApi, hostDom, previewMode = false  } = window.__ESYOUBE__
             setHostDom(hostDom)
             setPageApi(pageApi)
             setPreview(previewMode)
         }
     }
-
 
 
 
@@ -137,7 +136,7 @@ const AppCanvas = (props: IAppCanvasProps) => {
             resizeObserver.disconnect();
         };
 
-    }, [])
+    }, [preview])
 
 
 

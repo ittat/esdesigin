@@ -32,7 +32,7 @@ const tempConfig: IAppConfig = {
         'd23d2d-4g45-2d21d-h44': {
             id: 'd23d2d-4g45-2d21d-h44',
             pageName: 'page 1',
-            sort: ['asdas-fdsf234-23423we4-ewsrwe234', 'customComp1-id', 'element1', 'sdfrf34-4sdf43-sdfd234-few234-ewr','d3f-d3'],
+            sort: ['asdas-fdsf234-23423we4-ewsrwe234', 'customComp1-id', 'element1', 'sdfrf34-4sdf43-sdfd234-few234-ewr', 'd3f-d3'],
             domTree: {
                 'element1': {
                     id: 'element1',
@@ -216,7 +216,7 @@ export const useAppDom = () => {
     return custom.appDom
 }
 
-export const Provider: React.FC<PropsWithChildren<{}>> = (props) => {
+export const Provider: React.FC<PropsWithChildren<{ preview?: boolean }>> = (props) => {
 
     const globalData = useMemo(() => {
 
@@ -230,6 +230,7 @@ export const Provider: React.FC<PropsWithChildren<{}>> = (props) => {
         const appDom = new AppConfig({
             appConfig: tempConfig,
             materials: results,
+            preview: props?.preview || false
         })
 
         return {

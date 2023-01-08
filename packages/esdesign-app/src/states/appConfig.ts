@@ -25,17 +25,23 @@ export default class AppConfig implements IAppConfig {
 
     editedPage: PageConfig | null = null
 
-    constructor({ appConfig, materials }: { appConfig: IAppConfig, materials: Record<string, IESDesiginComponent> }) {
+    previewMode: boolean = false
+
+    constructor({ appConfig, materials, preview }: { appConfig: IAppConfig, materials: Record<string, IESDesiginComponent>, preview?: boolean }) {
 
         this.materials = materials
 
         this.version = appConfig.version
         this.appName = appConfig.appName
+        this.previewMode = preview || false
 
         this.customComponents = appConfig.customComponents
 
-        // @ts-ignore
-        // window.appdom = this
+        if (!this.previewMode) {
+            // @ts-ignore
+            window.appdom = this
+        }
+
 
 
         // pages

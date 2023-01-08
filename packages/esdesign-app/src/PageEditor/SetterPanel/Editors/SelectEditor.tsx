@@ -23,7 +23,7 @@ const SelectEditor = (props: { config: types.ArgStringConfig, name: string, onCh
             fullWidth
             label={name}
             value={value ?? ''}
-            // disabled={disabled}
+            disabled={!!config.action}
             onChange={handleChange}
             required={required}
             size='small'

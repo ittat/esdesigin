@@ -83,7 +83,7 @@ const Cell = (props: IProps) => {
 
 
 
-    const cleanProps = node.getProps()
+    const cleanProps =  node.getProps()
 
 
     return <Box className={`node-element`} data-node={node} data-nodeid={node.id} >

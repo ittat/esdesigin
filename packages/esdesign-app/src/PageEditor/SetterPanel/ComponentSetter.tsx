@@ -13,15 +13,19 @@ const ComponentSetter = () => {
 
     const selectNode = page.selectedNode
 
-    const onChangeHandler = useCallback((name: string, namespace: string, value: any) => {
+    const onChangeHandler = useCallback((name: string, namespace: string, value: any,isAction?:boolean) => {
 
         if (selectNode && (namespace in selectNode) && (name in selectNode[namespace])) {
             const arg = selectNode[namespace][name]
+     
+            if(isAction){
+                const oldValue = arg?.action || undefined
+                arg.action = value
+                page.appRoot.event.dispatch('component.props.update', { id: selectNode.id, name, oldValue, value })
 
-            if (isArgConfig(arg)) {
+            }else if (isArgConfig(arg)) {
                 const oldValue = arg.value
                 arg.value = value
-
                 page.appRoot.event.dispatch('component.props.update', { id: selectNode.id, name, oldValue, value })
             }
 

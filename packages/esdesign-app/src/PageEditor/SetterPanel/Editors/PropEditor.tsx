@@ -4,24 +4,15 @@ import { Stack } from "@mui/system";
 import { types } from "packages/esdesign-components/dist";
 import { useCallback, useMemo } from "react";
 
-import AddLinkIcon from '@mui/icons-material/AddLink';
-import LinkIcon from '@mui/icons-material/Link';
 import StringEditor from "./StringEditor";
 import SelectEditor from "./SelectEditor";
 import { observer } from "mobx-react";
 import BooleanEditor from "./BooleanEditor";
 import NumberEditor from "./NumberEditor";
 import JSONEditor from "./JsonEditor";
+import ActionEditor from "./ActionEditor";
 
 
-const PropBindControl = (props: { sx?: SxProps<Theme> }) => {
-
-
-    return <Box sx={props.sx}>
-        <Dialog open={false}></Dialog>
-        <AddLinkIcon />
-    </Box>
-}
 
 interface IProps {
 
@@ -29,7 +20,7 @@ interface IProps {
     name: string,
     config: types.ArgConfig,
     labelSplite?: boolean
-    onChange?(value: any): void
+    onChange?(value: any,isAction?:boolean): void
 }
 
 const PropItem = styled(Stack)({
@@ -41,16 +32,16 @@ const PropEditor = (props: IProps) => {
 
     const { config, labelSplite, name, namespace = 'props', onChange } = props
 
-    // TODO
-    const showBindIcon = true
-    const hasBound = false
 
-    const onChangeHandler = useCallback((value: any) => {
-        onChange?.(value)
+    const hasBound = true
+
+    const onChangeHandler = useCallback((value: any, isAction?:boolean) => {
+        onChange?.(value,isAction)
     }, [onChange])
 
     const commonProps = {
         name,
+        // disabled:hasBound,
         onChange: onChangeHandler
     }
 
@@ -66,7 +57,7 @@ const PropEditor = (props: IProps) => {
             return <NumberEditor  {...commonProps} config={config} />
         } else if (config.type == 'event') {
             // 事件类型没有只有绑定按钮
-            return <></>
+            return <>{commonProps.name}</>
         } else {
             return <JSONEditor  {...commonProps} config={config} />
         }
@@ -82,13 +73,7 @@ const PropEditor = (props: IProps) => {
         {labelSplite ? name : null}
         {getConfigInput}
 
-        {showBindIcon ? <PropBindControl sx={{
-            textAlign: 'center',
-            verticalAlign: 'center',
-            display: "flex",
-            alignItems: 'center',
-            mx: 2
-        }} /> : null}
+        <ActionEditor config={config} onChange={(value)=>onChangeHandler(value,true)} />
 
     </PropItem>
 }

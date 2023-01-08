@@ -2,10 +2,16 @@
  - ### 优先级高
 
 
+
+  - 实现事件输入参数
+  - 实现事件路由跳转
+  - 实现 scope 获取逻辑
+
+
+  - dom tree 查看
   
-  - 完成props 事件绑定
-  
-  - setter 的动态绑定逻辑 、表达式逻辑、scope 获取逻辑
+  - 实现props按照情况自动改变
+
  
   - query 
 
@@ -88,3 +94,5 @@ Slot 组件适配
 
 2023-01-08
   - feature: 补充 textfiled组件
+  - feature: 完成props事件绑定
+  - feature: 完成props输入绑定

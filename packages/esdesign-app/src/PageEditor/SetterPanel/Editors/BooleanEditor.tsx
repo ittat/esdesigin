@@ -17,7 +17,7 @@ const BooleanEditor = (props: { config: types.ArgBooleanConfig, name: string, on
     <FormControlLabel
       control={<Checkbox
         checked={!!value}
-        //  disabled={disabled}
+         disabled={!!config.action}
         onChange={handleChange}
       />}
       label={name}

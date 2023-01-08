@@ -39,7 +39,7 @@ const JSONEditor = (props: { config: types.ArgJsonConfig, name: string, onChange
 
     return (
         <>
-            <Button fullWidth variant='outlined' color='info' onClick={() => setOpen(true)}>{props.name}</Button>
+            <Button fullWidth variant='outlined' color='info' disabled={!!config.action} onClick={() => setOpen(true)}>{props.name}</Button>
             <Dialog open={isOpen} onClose={handleClose}>
                 <DialogTitle>Editor</DialogTitle>
                 <DialogContent>

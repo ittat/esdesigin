@@ -9,33 +9,51 @@ export declare type IESDesiginComponent = React.ComponentType & {
 export declare type IArgsConfigs = Record<string, IPropsConfig>;
 export type IArgsTypes = 'string' | 'number' | 'object' | 'array' | 'event'
 
-export interface ArgStringConfig {
+export interface ArgBoundActionConfig {
+    action?: EventActionConfig
+}
+
+export interface ArgStringConfig extends ArgBoundActionConfig {
     type: 'string';
     value: string;
     enums?: Array<string>;
     required?: boolean;
+
 }
-export interface ArgNumberConfig {
+export interface ArgNumberConfig extends ArgBoundActionConfig {
     type: 'number';
     value: number;
     enums?: Array<number>;
     range?: [number, number];
     required?: boolean;
 }
-export interface ArgBooleanConfig {
+export interface ArgBooleanConfig extends ArgBoundActionConfig {
     type: 'boolean';
     value: boolean;
     required?: boolean;
 }
-export interface ArgJsonConfig {
+export interface ArgJsonConfig extends ArgBoundActionConfig {
     type: 'object' | 'array';
     value: string;
     required?: boolean;
 }
-export interface ArgEventConfig {
+export interface ArgEventConfig extends ArgBoundActionConfig {
     type: 'event';
-    value: string;
 }
+
+export interface JSExpressionActionConfig {
+    type: 'JSExpression',
+    value: string
+}
+
+export interface NavigationActionConfig {
+    type: 'Navigation',
+    value: string,
+    isOutSize?: boolean
+}
+
+export type EventActionConfig = JSExpressionActionConfig | NavigationActionConfig
+
 export type ArgConfig = ArgStringConfig | ArgNumberConfig | ArgJsonConfig | ArgBooleanConfig | ArgEventConfig;
 
 export interface IPropsConfig {
@@ -147,7 +165,7 @@ export interface IPageConfig {
 export type ID = string
 
 export interface IComponentConfig<T = any> {
-    _type?:'builtIn' | 'custom',
+    _type?: 'builtIn' | 'custom',
     id: string,
     parentId: string;
     props?: RecordStr<T>;
@@ -173,7 +191,7 @@ export interface IComponentConfig<T = any> {
 //     childSort:undefined
 //     attrs.materialId
 export interface ICustomComponentConfig<T = any> extends IComponentConfig<T> {
-    _type?:'custom',
+    _type?: 'custom',
     parentId: string;
     child?: RecordStr<IComponentConfig>;
     sort?: Array<ID>;

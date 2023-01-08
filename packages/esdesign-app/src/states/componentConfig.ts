@@ -3,6 +3,7 @@ import { IAppDom, Rectangle } from "../types"
 import { compileModule } from "packages/esdesign-core/dist"
 import loadModule from "packages/esdesign-core/dist/loadModule"
 import { createCustomComponentName, ESDESIGN_COMPONENT, isArgConfig, PREFIX_CUSTOM_COMPONENT } from "packages/esdesign-components/dist"
+import { getJSExpressionHander } from "packages/esdesign-core/dist/evalExpression"
 import { getUUID } from "../globals"
 import { v4 } from "uuid"
 import { action, makeObservable, observable, } from "mobx"
@@ -214,10 +215,31 @@ export class ComponentConfig implements IComponentConfig {
     }
 
     // 把ArgConfig类型得props转换成key-value类型，喂给react组件
-    getProps() {
+     getProps() {
 
-        const props = Object.entries(this.props || {}).reduce((sum, [name, arg], idx) => {
-            sum[name] = arg.value
+
+
+        const props = Object.entries(this.props || {}).reduce( (sum, [name, arg], idx) => {
+            if (arg.action) {
+                // bound
+                const action = arg.action
+                if (action.type == 'JSExpression') {
+
+                    // TODO glabal scope
+                    const fn = getJSExpressionHander(action, {})
+                    if(arg.type == 'event'){
+                        sum[name] = fn
+                    }else{
+                        sum[name] =  fn()
+                    }                   
+                }
+
+                // TODO： nav
+
+            } else {
+                sum[name] = arg.value || undefined
+            }
+
             return sum
         }, {} as RecordStr<any>)
 

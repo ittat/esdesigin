@@ -18,7 +18,7 @@ const StringEditor = (props: { config: types.ArgStringConfig, name: string, onCh
         <TextField
             fullWidth
             value={value ?? ''}
-            // disabled={disabled}
+            disabled={!!config.action}
             onChange={handleChange}
             label={props.name}
             size='small'

@@ -31,7 +31,7 @@ const PageProvider = observer((props) => {
 const Preview = () => {
 
     return <>
-        <Provider>
+        <Provider preview={true}>
             <PageProvider>
                 <div style={{ width: '100vw', position: 'relative', height: '100vh' }}>
                     <CanvasHost previewMode={true} />
