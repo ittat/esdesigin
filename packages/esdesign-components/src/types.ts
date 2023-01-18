@@ -139,24 +139,20 @@ export interface ICustomComponentConfig<T = any> extends IComponentConfig<T> {
     } & RecordStr<T>;
 }
 
+
+export interface IAttrs<T = string> {
+    url: T;
+    params?:  Array<{key:string,value:string}>;
+    method: "GET" | "POST";
+    dataHandler?: string;
+}
+
 export interface IQueryConfig<T extends string = string> {
     pageId: string;
     id: ID,
     name: string,
     type: 'fetch';
-    attrs: {
-        // url: ArgStringConfig;
-        // params?: Array<ArgStringConfig>;
-        // method: ArgStringConfig
-        // dataHandler?:JSExpressionActionConfig
-
-        url: T;
-        params?: RecordStr<string>;
-        method: "GET" | "POST"
-        dataHandler?: string
-
-
-    };
+    attrs: IAttrs<T>;
 }
 
 

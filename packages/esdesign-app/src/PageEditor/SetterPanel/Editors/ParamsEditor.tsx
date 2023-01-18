@@ -3,9 +3,10 @@ import { Stack } from "@mui/system";
 import { getUUID } from "packages/esdesign-app/src/globals";
 import { RecordStr } from "packages/esdesign-app/src/types";
 import { types } from "packages/esdesign-components/dist";
+import { ArgStringConfig } from "packages/esdesign-components/dist/types";
 import { forwardRef, useCallback, useState, useImperativeHandle } from "react";
 
-const KeyValuePair = ({ tkey, value, onChange }: { tkey?: string, value?: string, onChange?(key, value): void }) => {
+const KeyValuePair = ({ id,tkey, value, onChange }: { id: string, tkey?: string, value?: string, onChange?(id,key, value): void }) => {
 
 
     const [_key, setKey] = useState(tkey)
@@ -13,7 +14,7 @@ const KeyValuePair = ({ tkey, value, onChange }: { tkey?: string, value?: string
 
     const onBlur = useCallback(() => {
         if (_value) {
-            onChange?.(_key, _value)
+            onChange?.(id,_key, _value)
         }
     }, [_value])
 
@@ -31,18 +32,38 @@ const KeyValuePair = ({ tkey, value, onChange }: { tkey?: string, value?: string
 
 }
 
-const ParamsEditor = forwardRef((props: { object: RecordStr<string>, name: string }, ref) => {
+
+type IParams = RecordStr<{
+    key: ArgStringConfig<string>;
+    value: ArgStringConfig<string>;
+}>
+const ParamsEditor = forwardRef((props: {
+    params?: IParams,
+    name: string,
+}, ref) => {
 
 
 
-    const [object, setObject] = useState(props.object)
+    const [object, setObject] = useState(props.params || {})
 
 
-    const updateObject = (key: string, value: string) => {
-        setObject(obj => {
-            obj[key] = value.toString().trim()
-            return { ...obj }
-        })
+    const updateObject = (id:string,key: string, value: string) => {
+        if(id){
+            setObject(obj => {
+                obj[id] = {
+                    'key':{
+                        type:'string',
+                        value:key
+                    },
+                    'value':{
+                        type:'string',
+                        value:value
+                    }
+                }
+                return { ...obj }
+            })
+        }
+       
     }
 
 
@@ -59,9 +80,9 @@ const ParamsEditor = forwardRef((props: { object: RecordStr<string>, name: strin
     return (<>
         <Typography variant='body2'>{props.name}</Typography>
         {
-            Object.entries(object).map(([key, value]) => <KeyValuePair key={key} tkey={key} value={value} onChange={updateObject} />) // keyValuePair({ key, value, onChange: updateObject }))
+            Object.entries(object).map(([id, keyValue]) => <KeyValuePair key={id} id={id} tkey={keyValue.key.value} value={keyValue.value.value} onChange={updateObject} />) // keyValuePair({ key, value, onChange: updateObject }))
         }
-        <Button onClick={() => updateObject(`default_${getUUID().slice(0, 8)}`, '')}>ADD</Button>
+        <Button onClick={() => updateObject(getUUID().slice(0, 8),`default_key`, '')}>ADD</Button>
     </>
 
     )

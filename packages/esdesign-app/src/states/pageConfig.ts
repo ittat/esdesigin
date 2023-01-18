@@ -165,7 +165,7 @@ export default class PageConfig implements IPageConfig {
                 type: "fetch",
                 attrs: {
                     url: '/api/GetEntityMetas',
-                    params: {},
+                    params: [],
                     method: "GET"
                 }
             }

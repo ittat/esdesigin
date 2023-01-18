@@ -1,17 +1,12 @@
 
 import { action, makeObservable, observable, runInAction } from "mobx";
-import { ArgStringConfig, IQueryConfig, JSExpressionActionConfig, RecordStr } from "packages/esdesign-components/dist/types";
+import { ArgStringConfig, IAttrs, IQueryConfig, JSExpressionActionConfig, RecordStr } from "packages/esdesign-components/dist/types";
 import { getJSExpressionHander } from "packages/esdesign-core/dist/evalExpression";
 import { getUUID } from "../globals";
 import { API_NAMES, API_NAMES_LIST, IApiResult, RequestType } from "../types";
 import PageConfig from "./pageConfig";
 
-interface IAttrs {
-    url: API_NAMES;
-    params?: RecordStr<string>;
-    method: "GET" | "POST";
-    dataHandler?: string;
-}
+
 
 export default class QueryConfig<T = API_NAMES> implements IQueryConfig<API_NAMES> {
     pageId: string;
@@ -21,11 +16,11 @@ export default class QueryConfig<T = API_NAMES> implements IQueryConfig<API_NAME
     type: "fetch";
     _attrs: {
         url: ArgStringConfig<API_NAMES | string>;
-        params?: RecordStr<ArgStringConfig>;
+        params?: RecordStr<{ key: ArgStringConfig, value: ArgStringConfig }>;
         method: ArgStringConfig<"GET" | "POST">;
         dataHandler?: JSExpressionActionConfig;
     }
-    attrs: IAttrs
+    attrs: IAttrs<API_NAMES>
 
     rawResult?: IApiResult<T> = undefined  //TODO: 使用selm api 规范
 
@@ -76,13 +71,27 @@ export default class QueryConfig<T = API_NAMES> implements IQueryConfig<API_NAME
             this._attrs.method.value = config.attrs.method
             this._attrs.url.value = config.attrs.url
             if (config.attrs.params) {
-                Object.entries(config.attrs.params).forEach(([key, value]) => {
-                    this._attrs.params[key] = {
-                        type: 'string',
-                        value: value
-                    }
+                config.attrs.params.forEach(keyval => {
+                    const id = getUUID()
+                    this._attrs.params[id] = {
+                        key: {
+                            type: 'string',
+                            value: keyval.key
+                        },
+                        value: {
+                            type: 'string',
+                            value: keyval.value
+                        }
 
+                    }
                 })
+                // Object.entries(config.attrs.params).forEach(([key, value]) => {
+                //     this._attrs.params[key] = {
+                //         type: 'string',
+                //         value: value
+                //     }
+
+                // })
             }
             if (config.attrs.dataHandler) {
                 this._attrs.dataHandler = {
@@ -125,8 +134,10 @@ export default class QueryConfig<T = API_NAMES> implements IQueryConfig<API_NAME
         const attrs = this._attrs
         const url = attrs.url.value
         const method = attrs.method.value
-        const params = Object.entries(attrs.params).reduce((sum, [k, config], index) => {
-            sum[k] = config.value
+        const params = Object.entries(attrs.params).reduce((sum, [id, config], index) => {
+            const key = config.key.value
+            const val = config.value.value
+            sum[key] = val
             return sum
         }, {})
         let result = null
@@ -156,7 +167,7 @@ export default class QueryConfig<T = API_NAMES> implements IQueryConfig<API_NAME
         if (name == 'dataHandler') {
             this._attrs.dataHandler = { type: 'JSExpression', value }
         } else if (name == 'params') {
-            this._attrs.params
+            this._attrs.params = value as RecordStr<{ key: ArgStringConfig, value: ArgStringConfig }>
 
         } else {
             this._attrs[name].value = value

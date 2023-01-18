@@ -89,15 +89,10 @@ const QuerySetter = ({ config }: { config: QueryConfig }) => {
                     </Stack>
 
                     <Divider />
-                    {
-                        config._attrs.method.value == 'POST' ? <>
-                            <ParamsEditor name='Params' object={{
-                                adads: 'asdasd',
-                                er3er: 'df3f5455'
-                            }} ref={parmasRef} />
-                            <Divider />
-                        </> : null
-                    }
+
+                    <ParamsEditor name='Params' params={config._attrs?.params} ref={parmasRef} />
+                    <Divider />
+
 
                     <Button variant='outlined' onClick={onRun}>Run</Button>
 
