@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import { types } from "packages/esdesign-components/dist";
 import { useCallback, useState } from "react";
 
-const SelectEditor = (props: { config: types.ArgStringConfig, name: string, onChange?(value?: string): void }) => {
+const SelectEditor = (props: { config: types.ArgStringConfig, name: string, onChange?(value?: string): void ,minWidth?:boolean}) => {
 
 
     const { name, config, onChange } = props
@@ -20,7 +20,7 @@ const SelectEditor = (props: { config: types.ArgStringConfig, name: string, onCh
     return (
         <TextField
             select
-            fullWidth
+            fullWidth = {!props.minWidth}
             label={name}
             value={value ?? ''}
             disabled={!!config.action}

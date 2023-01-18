@@ -2,18 +2,16 @@
  - ### 优先级高
 
 
+  - page parameters 获取 共享
 
-  - 实现事件输入参数
-  - 实现事件路由跳转
+  - 组件之间的dep实现
+
   - 实现 scope 获取逻辑
 
+  - 实现事件路由跳转
 
-  - dom tree 查看
-  
   - 实现props按照情况自动改变
-
  
-  - query 
 
   - CustomComponent 的依赖引入问题
       - mui 样式问题 - ?
@@ -23,6 +21,12 @@
     
 
  - ### 优先级低
+
+
+  - 实现事件输入参数
+
+    - dom tree 查看
+  
 
    - 完善 Setter Panel 
    - CustomComponent 编辑界面 异常处理
@@ -96,3 +100,7 @@ Slot 组件适配
   - feature: 补充 textfiled组件
   - feature: 完成props事件绑定
   - feature: 完成props输入绑定
+
+
+2023-01-18
+  - feature: 基本实现query的获取和编辑

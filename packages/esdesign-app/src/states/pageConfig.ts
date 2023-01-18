@@ -1,6 +1,6 @@
 import { ComponentConfig, CustomComponentConfig } from "./componentConfig"
-import { IPropsConfig, IESDesiginComponent, ICustomComponentNode, DomNodeBase, IElementNode, IPageNode, RecordStr, Types, IAppConfig, ICustomComponentConfig, IPageConfig, IComponentConfig, IFetchConfig, ID, ArgConfig } from "packages/esdesign-components/dist/types"
-import { IAppDom, Rectangle } from "../types"
+import { IPropsConfig, IESDesiginComponent, ICustomComponentNode, DomNodeBase, IElementNode, IPageNode, RecordStr, Types, IAppConfig, ICustomComponentConfig, IPageConfig, IComponentConfig, IFetchConfig, ID, ArgConfig, IQueryConfig } from "packages/esdesign-components/dist/types"
+import { API_NAMES, IAppDom, Rectangle } from "../types"
 import { compileModule } from "packages/esdesign-core/dist"
 import loadModule from "packages/esdesign-core/dist/loadModule"
 import { createCustomComponentName, ESDESIGN_COMPONENT, isArgConfig, PREFIX_CUSTOM_COMPONENT } from "packages/esdesign-components/dist"
@@ -12,6 +12,7 @@ import { RectangleEdge, RECTANGLE_SLOT_CENTER } from "../PageEditor/DetectOverla
 
 import _ from "lodash"
 import AppConfig from "./appConfig"
+import QueryConfig from "./queryConfig"
 
 
 
@@ -21,11 +22,17 @@ export default class PageConfig implements IPageConfig {
     id: string
     domTree: RecordStr<ComponentConfig> = {}
     sort: Array<ID> = []
-    query?: RecordStr<IFetchConfig>
+    query?: RecordStr<QueryConfig> = {}
     theme?: any
 
     appRoot: AppConfig
 
+
+    scope: RecordStr<any> = {}
+
+
+
+    parameters: RecordStr<any> = {}
 
 
 
@@ -79,6 +86,10 @@ export default class PageConfig implements IPageConfig {
         this.pageName = config.pageName
         this.appRoot = appConfig
 
+        if (config.scope) {
+            this.scope = config.scope
+        }
+
         if (!config.id) {
             this.id = getUUID()
         } else {
@@ -105,19 +116,16 @@ export default class PageConfig implements IPageConfig {
 
 
         // this.query
-        // Object.entries(config.domTree).forEach(([id,node])=>{
-        //     this.domTree[id]= new 
-        // })
-
+        this.initQuery(config.query || {})
 
 
 
         makeObservable(this, {
-            //     domTree: observable,
             sort: observable.shallow,
-            // domTree: observable,
+            pageName: observable,
             selectedNode: observable.ref,
             drogOverNode: observable.ref,
+            updatePageName: action.bound,
             setSelectedNode: action.bound,
             clearSelectNode: action.bound,
             updateRects: action.bound,
@@ -130,6 +138,78 @@ export default class PageConfig implements IPageConfig {
 
     }
 
+    updatePageName(val: string) {
+        this.pageName = val
+    }
+
+    initQuery(configs: RecordStr<IQueryConfig>) {
+
+
+        Object.entries(configs).map(([id, config]) => {
+
+            if (!(id in this.query)) {
+                this.query[id] = new QueryConfig<API_NAMES>({ page: this, config, fetchAuto: true })
+            }
+        })
+
+    }
+
+    AddQuery(config?: IQueryConfig | QueryConfig) {
+
+        if (!config) {
+            const id = getUUID()
+            const temp: IQueryConfig<API_NAMES> = {
+                pageId: this.id,
+                id,
+                name: "New Query",
+                type: "fetch",
+                attrs: {
+                    url: '/api/GetEntityMetas',
+                    params: {},
+                    method: "GET"
+                }
+            }
+
+            this.query[id] = new QueryConfig({ page: this, config: temp, fetchAuto: true })
+        } else if ('constructor' in config) {
+            const id = (config as QueryConfig).id
+            this.query[id] = (config as QueryConfig)
+        } else {
+            const id = getUUID()
+            this.query[id] = new QueryConfig({ page: this, config, fetchAuto: true })
+        }
+
+
+
+        // todo: 
+
+        this.appRoot.event.dispatch('page.query.update', {})
+    }
+
+
+    getScope() {
+        const scope = Object.assign({}, this.scope)
+        // state
+
+        // query
+        scope.query = this.query
+        // params
+
+    }
+
+    pageInit() {
+        // parameters
+
+
+
+    }
+
+    updateGlobelScope() {
+
+        'page.glabol.update'
+    }
+
+
     setDrogOverNode(node: ComponentConfig | this) {
         // 只能是Page或者Element被Over
         // if (PageConfig.isPageConfig(node) || ComponentConfig)
@@ -140,7 +220,7 @@ export default class PageConfig implements IPageConfig {
         }
 
         // 如果dargging node 是 node 的子组件、子子组件，不允许选中drag over  node
-        if(this.draggingNode && !!this.draggingNode.findElementById(node.id)){
+        if (this.draggingNode && !!this.draggingNode.findElementById(node.id)) {
             this.drogOverNode = undefined
             return
 
@@ -318,8 +398,6 @@ export default class PageConfig implements IPageConfig {
     }
 
 
-
-
     findElementById(nodeId: string) {
 
 
@@ -413,6 +491,7 @@ export default class PageConfig implements IPageConfig {
 
         return this.elementRects[nodeId]
     }
+
 
     static isPageConfig(obj: any): obj is PageConfig {
         return typeof obj == 'object' && 'pageName' in obj

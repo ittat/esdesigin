@@ -13,10 +13,10 @@ export interface ArgBoundActionConfig {
     action?: EventActionConfig
 }
 
-export interface ArgStringConfig extends ArgBoundActionConfig {
+export interface ArgStringConfig<T extends string = string> extends ArgBoundActionConfig {
     type: 'string';
-    value: string;
-    enums?: Array<string>;
+    value: T;
+    enums?: Array<T>;
     required?: boolean;
 
 }
@@ -62,82 +62,12 @@ export interface IPropsConfig {
 }
 export declare type RecordStr<T = any> = Record<string, T>;
 export declare type DomNodeType = 'app' | 'page' | 'element' | 'customComponent' | 'fetch';
-export interface DomNodeBase {
-    id: string;
-    parentId: string | null;
-    type: DomNodeType;
-    props?: RecordStr<IPropsConfig>;
-    attrs?: object;
-}
+
 export declare enum Types {
     String = 1,
     Number = 2
 }
-export interface IAppNode extends DomNodeBase {
-    parentId: null;
-    type: 'app';
-    attrs: {
-        appName: {
-            type: Types.String;
-            value: unknown;
-        };
-    };
-}
-export interface IPageNode extends DomNodeBase {
-    parentId: string;
-    type: 'page';
-    attrs: {
-        pageName: {
-            type: Types.String;
-            value: unknown;
-        };
-    };
-}
-export interface IElementNode extends DomNodeBase {
-    parentId: string;
-    type: 'element';
-    props?: IArgsConfigs;
-    attrs: {
-        componentName: {
-            type: Types.String;
-            value: string;
-        };
-        src: string;
-    };
-}
-export interface ICustomComponentNode extends DomNodeBase {
-    parentId: string;
-    type: 'customComponent';
-    props?: IArgsConfigs;
-    attrs: {
-        componentName: {
-            type: Types.String;
-            value: string;
-        };
-        source: {
-            type: Types.String;
-            value: string;
-        };
-    };
-}
-export interface IFetchNode extends DomNodeBase {
-    parentId: string;
-    type: 'fetch';
-    attrs: {
-        url: {
-            type: Types.String;
-            value: unknown;
-        };
-        params: {
-            type: Types.String;
-            value: unknown;
-        };
-        method: {
-            type: Types.String;
-            value: unknown;
-        };
-    };
-}
+
 
 // refactor - 2023!
 export interface IAppConfig {
@@ -156,8 +86,9 @@ export interface IPageConfig {
     id: string,
     domTree: RecordStr<IComponentConfig>,
     sort?: Array<ID>
-    query?: RecordStr<IFetchConfig>,
+    query?: RecordStr<IQueryConfig>,
     theme?: any,//TODO
+    globelScope: RecordStr<any>,
 
 
 }
@@ -208,22 +139,23 @@ export interface ICustomComponentConfig<T = any> extends IComponentConfig<T> {
     } & RecordStr<T>;
 }
 
-export interface IFetchConfig {
-    parentId: string;
+export interface IQueryConfig<T extends string = string> {
+    pageId: string;
+    id: ID,
+    name: string,
     type: 'fetch';
     attrs: {
-        url: {
-            type: Types.String;
-            value: unknown;
-        };
-        params: {
-            type: Types.String;
-            value: unknown;
-        };
-        method: {
-            type: Types.String;
-            value: unknown;
-        };
+        // url: ArgStringConfig;
+        // params?: Array<ArgStringConfig>;
+        // method: ArgStringConfig
+        // dataHandler?:JSExpressionActionConfig
+
+        url: T;
+        params?: RecordStr<string>;
+        method: "GET" | "POST"
+        dataHandler?: string
+
+
     };
 }
 

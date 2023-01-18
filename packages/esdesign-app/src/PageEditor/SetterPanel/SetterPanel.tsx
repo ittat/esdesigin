@@ -5,6 +5,7 @@ import { useState } from "react"
 import ComponentSetter from "./ComponentSetter"
 import { getPage } from "../../Provider"
 import { observer } from "mobx-react"
+import PageSetter from "./PageSetter"
 
 const PanelRoot = styled(Box)({
 
@@ -38,7 +39,7 @@ const SetterPanel = () => {
                 </TabList>
             </Box>
             <TabPanel value={Tabs.Component} className={''}>
-                {selectNode ? <ComponentSetter /> : 'PageSetter'}
+                {selectNode ? <ComponentSetter /> : <PageSetter/>}
 
             </TabPanel>
             <TabPanel value={Tabs.Theme} className={''}>

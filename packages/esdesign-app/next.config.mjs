@@ -193,14 +193,14 @@ export default  withBundleAnalyzer(
       //     },
       //   ];
       // },
-      // async rewrites() {
-      //   return [
-      //     {
-      //       source: '/health-check',
-      //       destination: '/api/health-check',
-      //     },
-      //   ];
-      // },
+      async rewrites() {
+        return [
+          {
+            source: '/api/:path*',
+            destination: 'http://localhost:5000/api/:path*',
+          },
+        ];
+      },
       // headers: async () => {
       //   return [
       //     {

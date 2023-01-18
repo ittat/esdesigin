@@ -396,7 +396,7 @@ export default React.forwardRef<MonacoEditorHandle, MonacoEditorProps>(function 
         fixedOverflowWidgets: true,
         // See https://github.com/microsoft/monaco-editor/issues/181
         overflowWidgetsDomNode: getOverflowWidgetsDomNode(theme),
-        ...extraOptions,
+        ...extraOptions
       });
 
       instanceRef.current = instance;

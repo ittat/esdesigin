@@ -1,10 +1,10 @@
-import { ArgConfig, DomNodeBase, DomNodeType, IArgsConfigs, IComponentConfig, ICustomComponentConfig, IESDesiginComponent, RecordStr, Types } from "./types";
+import { ArgConfig, IComponentConfig, ICustomComponentConfig, IESDesiginComponent, RecordStr } from "./types";
 
 export const ESDESIGN_COMPONENT = 'EsDesginComponent';
 
 export const PREFIX_CUSTOM_COMPONENT = 'customComponent.'
 
-export function createCustomComponentName(name:string){
+export function createCustomComponentName(name: string) {
 
     return `${PREFIX_CUSTOM_COMPONENT}${name}`
 

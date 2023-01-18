@@ -32,6 +32,21 @@ const tempConfig: IAppConfig = {
         'd23d2d-4g45-2d21d-h44': {
             id: 'd23d2d-4g45-2d21d-h44',
             pageName: 'page 1',
+            scope:{},
+            query:{
+                "23r2r-23r2r3r-23rr-23r23-23r32":{
+                    id:'erwe-43r-4retrt43-r23r2-d23',
+                    pageId:'d23d2d-4g45-2d21d-h44',
+                    name:'Query Test',
+                    type:'fetch',
+                    attrs:{
+                        url:'/api/GetEntityMetas',
+                        method:'GET',
+                        dataHandler:'status',
+                    }
+           
+                }
+            },
             sort: ['asdas-fdsf234-23423we4-ewsrwe234', 'customComp1-id', 'element1', 'sdfrf34-4sdf43-sdfd234-few234-ewr', 'd3f-d3'],
             domTree: {
                 'element1': {

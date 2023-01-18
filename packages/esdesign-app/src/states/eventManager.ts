@@ -7,6 +7,8 @@ export type ACTION_TYPES =
     | 'component.props.update'
     | 'appdom.add.or.update.customComponents'
     | 'appdom.add.page'
+    | 'page.glabol.scope.update'
+    | 'page.query.update'
 
 export interface IEvent {
     readonly listeners: Map<ACTION_TYPES, Set<Function>>,

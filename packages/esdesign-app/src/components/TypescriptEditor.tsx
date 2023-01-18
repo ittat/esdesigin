@@ -14,7 +14,7 @@ export interface TypescriptEditorProps extends Omit<MonacoEditorProps, 'language
   onSave?: (value: string) => void;
   functionBody?: boolean;
   topLevelAwait?: boolean;
-  refT:any
+  refT?:any
 }
 
 export default function TypescriptEditor({
