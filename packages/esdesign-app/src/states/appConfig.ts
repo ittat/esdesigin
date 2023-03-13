@@ -1,6 +1,6 @@
 import { IPropsConfig, IESDesiginComponent, ICustomComponentNode, DomNodeBase, IElementNode, IPageNode, RecordStr, Types, IAppConfig, ICustomComponentConfig, IPageConfig, IComponentConfig, IFetchConfig, ID, ArgConfig } from "packages/esdesign-components/dist/types"
 import { IAppDom, Rectangle } from "../types"
-import { compileModule } from "packages/esdesign-core/dist"
+import { compileModule } from "@ittat/esdesign-core/dist"
 import loadModule from "packages/esdesign-core/dist/loadModule"
 import { createCustomComponentName, ESDESIGN_COMPONENT, isArgConfig, PREFIX_CUSTOM_COMPONENT } from "packages/esdesign-components/dist"
 import { getUUID } from "../globals"
@@ -11,6 +11,9 @@ import { RectangleEdge, RECTANGLE_SLOT_CENTER } from "../PageEditor/DetectOverla
 
 import _ from "lodash"
 import PageConfig from "./pageConfig"
+import ObserverObject from "./ObserverBus"
+
+
 
 export default class AppConfig implements IAppConfig {
     version: string
@@ -26,6 +29,9 @@ export default class AppConfig implements IAppConfig {
     editedPage: PageConfig | null = null
 
     previewMode: boolean = false
+
+
+    appScopes: Record<string, any> = ObserverObject;
 
     constructor({ appConfig, materials, preview }: { appConfig: IAppConfig, materials: Record<string, IESDesiginComponent>, preview?: boolean }) {
 

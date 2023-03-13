@@ -11,6 +11,7 @@ function Button(props: ICommonProps) {
 
   const clearProps = filterProps(props, ['text', 'children'])
 
+
   return (
     <B  {...clearProps}>
       {text}
@@ -24,10 +25,10 @@ function Button(props: ICommonProps) {
 export default createBuiltInComponent('Button', Button, '', {
   text: {
     type: 'string',
-    value: 'button',
+    value: 'button232312',
     action:{
       type:'JSExpression',
-      value:'"get me"'
+      value:'$scope("btn1")'
     }
   },
   variant: {
@@ -39,11 +40,11 @@ export default createBuiltInComponent('Button', Button, '', {
     type: 'event',
     action:{
       type:'JSExpression',
-      value:'console.log("ohhhhhh! yeah!")'
+      value:'$scope("btn1","change!")'
     }
   },
   ...MUISizeConfig,
   ...MUIColorConfig,
   ...MUIfullWidthConfig,
   ...disabledConfig,
-});  
+});

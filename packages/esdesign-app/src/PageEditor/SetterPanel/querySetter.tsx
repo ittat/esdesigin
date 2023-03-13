@@ -65,15 +65,16 @@ const QuerySetter = ({ config }: { config: QueryConfig }) => {
 
     return <>
         <Button fullWidth variant='outlined' color='info' onClick={() => setOpen(true)}>{config.name}</Button>
-        <Dialog open={open} onClose={handleClose}>
+        <Dialog open={open} onClose={handleClose} fullWidth maxWidth='lg'>
             <DialogTitle>Query</DialogTitle>
             <DialogContent>
                 <Stack
                     sx={{
-                        width: 550,
+                        // width: 550,
                         height: 550,
                         gap: 3,
                         overflowX: 'hidden',
+                        padding:4,
                         paddingTop: 1
                     }}
                     direction='column'
@@ -96,7 +97,7 @@ const QuerySetter = ({ config }: { config: QueryConfig }) => {
 
                     <Button variant='outlined' onClick={onRun}>Run</Button>
 
-                    <Divider />
+            
                     <Accordion>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}
@@ -120,7 +121,7 @@ const QuerySetter = ({ config }: { config: QueryConfig }) => {
                             </Box>
                         </AccordionDetails>
                     </Accordion>
-                    <Divider />
+         
                     <Accordion>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}
@@ -131,10 +132,10 @@ const QuerySetter = ({ config }: { config: QueryConfig }) => {
                         </AccordionSummary>
                         <AccordionDetails sx={{ height: 350 }}>
                             <Typography>
-                                左侧输入js数据处理方法，hou'c
+                                左侧输入js数据处理方法，右侧输出处理后的数据
                             </Typography>
 
-                            <SplitPane split="vertical" allowResize size="50%">
+                            <SplitPane split="vertical" allowResize size="75%">
 
                                 <TypescriptEditor
                                     // refT={editorRef}

@@ -8,6 +8,8 @@ import { RecordStr } from "../types"
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { ComponentConfig } from "../states/componentConfig"
 
+// NOTE： 不知道为什么 mobx 在这里面监听响应的没有效果！！！
+
 interface IProps {
     node: ComponentConfig
 }
@@ -83,7 +85,7 @@ const Cell = (props: IProps) => {
 
 
 
-    const cleanProps =  node.getProps()
+    const cleanProps = node.getProps()
 
 
     return <Box className={`node-element`} data-node={node} data-nodeid={node.id} >
@@ -105,4 +107,3 @@ const Cell = (props: IProps) => {
 }
 
 export default Cell
-

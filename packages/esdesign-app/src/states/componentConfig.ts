@@ -6,7 +6,7 @@ import { createCustomComponentName, ESDESIGN_COMPONENT, isArgConfig, PREFIX_CUST
 import { getJSExpressionHander } from "packages/esdesign-core/dist/evalExpression"
 import { getUUID } from "../globals"
 import { v4 } from "uuid"
-import { action, makeObservable, observable, } from "mobx"
+import { action, computed, makeObservable, observable, } from "mobx"
 import { EventManager } from "./eventManager"
 import { RectangleEdge, RECTANGLE_SLOT_CENTER } from "../PageEditor/DetectOverlay"
 
@@ -31,12 +31,14 @@ export class ComponentConfig implements IComponentConfig {
 
     materialId: string
 
-    dom
+    // 组件的挂载点，只有在数据挂载到页面后才有数据
+    ref?: any = undefined
 
 
     rect?: Rectangle = undefined
 
-    /** 
+
+    /**
      * TODO: config 和 materialsConfig有功能重叠了！！！！
      * materialsConfig - 如果是custom 的 component ，我们需要提供一些预处理，并传入materialsConfig
      */
@@ -104,7 +106,7 @@ export class ComponentConfig implements IComponentConfig {
         }
 
 
-        // this.child 
+        // this.child
         Object.entries(config.child || {}).forEach(([id, node]) => {
             if (CustomComponentConfig.IsCustomComponentConfigType(node)) {
                 this.child[id] = new CustomComponentConfig({ config: node, parentId: this.id, appRoot: this.appRoot, pageRoot: pageRoot })
@@ -113,7 +115,7 @@ export class ComponentConfig implements IComponentConfig {
             }
         })
 
-        // this.childSort 
+        // this.childSort
         if (config.sort) {
             this.childSort = config.sort
         } else {
@@ -214,24 +216,101 @@ export class ComponentConfig implements IComponentConfig {
         // NOTE: 这个时候并没有被GC回收
     }
 
-    // 把ArgConfig类型得props转换成key-value类型，喂给react组件
-     getProps() {
+
+    // this function can recomplute props and rerender react UI
+    forcesToUpdate() {
+        this.appRoot.event.dispatch('component.props.update', { id: this.id })
+
+    }
+
+    // this function can return the current value in a observable scope
+    // and add some thing (forcesToUpdate) to make action,when target value has been change
+    //
+    getObserveValue(scope: RecordStr, key: string) {
+        if (key in scope) {
+            const rx = scope[key] as Function;
+
+            return rx(this.forcesToUpdate)
+
+        }
+    }
 
 
 
-        const props = Object.entries(this.props || {}).reduce( (sum, [name, arg], idx) => {
+
+
+    /**
+     *
+     * 把ArgConfig类型得props转换成key-value类型，喂给react组件
+     *
+     *
+     * 关于如何属性响应式的说明：
+     *  1 app的scope时实现了proxy劫持的
+     *          当需要get里面的数据时，需要提供一个fn回调
+     *          这个回调需要在set的时候进行触发依赖回调
+     *  2 在依赖侧，封装了一个方法getObserveValue
+     *          它收到app的scope回调后，会去执行this.forcesToUpdate
+     *          this.forcesToUpdate 回去 触发全局事件
+     *          在react侧的<Cell/>组件内有设置对应id的判断
+     *          然后强制触发Cell组件的自身重新计算一遍
+     *          最后实现界面的改变
+     *
+     *
+     * 例子：
+     *       this.appRoot.appScopes["sdadda"] = "asdasdsad21312";
+     *       this.getObserveValue(this.appRoot.appScopes,"sdadda")
+     *
+     * 在 jsexpress里面的语法
+     *       读：$scope(key)
+     *       写：$scope(key,value)
+     *
+     */
+    getProps() {
+
+
+        const props = Object.entries(this.props || {}).reduce((sum, [name, arg], idx) => {
             if (arg.action) {
                 // bound
                 const action = arg.action
                 if (action.type == 'JSExpression') {
 
-                    // TODO glabal scope
-                    const fn = getJSExpressionHander(action, {})
-                    if(arg.type == 'event'){
+                    //  glabal scope
+                    //  $scope 是 为了更加方便获取get states的写法
+                    const scope = {
+                        getObserveValue: this.getObserveValue,
+                        appScope: this.appRoot.appScopes,
+                        $scope: (key: string, value: any) => {
+                            const scope = this.appRoot.appScopes
+                            if (key && value) {
+                                // --- set 方法
+                                scope[key] = value
+                            } else if (key && !value) {
+                                // --- get 方法
+
+                                // 这样可以防止在set一个新的key之前就对这个key进行get
+                                // 导致fn没有加入dep依赖收集中
+                                if (!(key in scope)) {
+                                    scope[key] = undefined
+                                }
+
+                                // 返回数据
+                                return this.getObserveValue(scope, key)
+                            } else {
+                                console.warn("Do you know what you do?")
+                            }
+
+                        },
+                    }
+                    const fn = getJSExpressionHander(action, scope)
+
+
+
+
+                    if (arg.type == 'event') {
                         sum[name] = fn
-                    }else{
-                        sum[name] =  fn()
-                    }                   
+                    } else {
+                        sum[name] = fn()
+                    }
                 }
 
                 // TODO： nav
@@ -247,6 +326,8 @@ export class ComponentConfig implements IComponentConfig {
         return props
 
     }
+
+
 
     static async initMaterial(config: ComponentConfig, appApi: AppConfig, materials: Record<string, IESDesiginComponent>) {
         let dom: IESDesiginComponent = materials['Error']
@@ -389,4 +470,3 @@ export class CustomComponentConfig extends ComponentConfig implements ICustomCom
 
 
 }
-

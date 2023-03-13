@@ -126,7 +126,7 @@ const PropBindControl = (props: {
 const ActionEditor = (props: { config: ArgConfig, onChange?(value: EventActionConfig): void }) => {
 
     const actionConfig = props.config?.action || undefined
-
+    
     return <>
         <PropBindControl
             sx={{

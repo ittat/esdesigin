@@ -2,6 +2,9 @@
  - ### 优先级高
 
 
+  - 实现 query + elemet 双向数据 获取、监听
+
+
   - page parameters 获取 共享
 
   - 组件之间的dep实现
@@ -11,14 +14,14 @@
   - 实现事件路由跳转
 
   - 实现props按照情况自动改变
- 
+
 
   - CustomComponent 的依赖引入问题
       - mui 样式问题 - ?
 
 
 
-    
+
 
  - ### 优先级低
 
@@ -26,14 +29,14 @@
   - 实现事件输入参数
 
     - dom tree 查看
-  
 
-   - 完善 Setter Panel 
+
+   - 完善 Setter Panel
    - CustomComponent 编辑界面 异常处理
    - AppsOverView 完善
-    
 
-    
+
+
  - ### 逻辑问题
 
 
@@ -42,11 +45,11 @@
 
 # 正在排期
 
-  - component List 不在左侧显示（改成在底部抽屉） 
+  - component List 不在左侧显示（改成在底部抽屉）
   - 快捷按钮功能
   - Editor 插件性能问题
   - Left panel UI
-  - 实现 grid 组件 
+  - 实现 grid 组件
   - save to loaction
 
 
@@ -54,7 +57,7 @@
 
 # 计划实现
 
-  - 项目独立分包依赖 
+  - 项目独立分包依赖
   - shema 导出导入
   - 界面样式
   - props 的 required 标记
@@ -68,9 +71,9 @@
 # 已经实现
 
 
-Canvas 自适应更新 
+Canvas 自适应更新
 
-Slot 组件适配 
+Slot 组件适配
 
 成为独立项目 ESDesign
 
@@ -79,10 +82,10 @@ Slot 组件适配
  2023-01-05
  - 重新整理 settr props 标准协议问题
  - 完善props的 interface part 1
- - 实现 PageRow、column 的对齐 
+ - 实现 PageRow、column 的对齐
  - 补充Button props
  - 补充 boolean Setter
- - 解决 路由切换问题   
+ - 解决 路由切换问题
 
  2023-01-06
  - fix:  添加元素报错；future: 编辑器热键保存[here](https://microsoft.github.io/monaco-editor/playground.html#interacting-with-the-editor-listening-to-key-events)
@@ -104,3 +107,8 @@ Slot 组件适配
 
 2023-01-18
   - feature: 基本实现query的获取和编辑
+  - fix: Query - 矫正params
+
+
+2023-03-13
+  - feature: 实现 scope 和 elemet 之间的获取、监听更新(使用Proxy+ Event)
