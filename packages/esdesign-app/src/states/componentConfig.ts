@@ -276,6 +276,7 @@ export class ComponentConfig implements IComponentConfig {
 
                     //  glabal scope
                     //  $scope 是 为了更加方便获取get states的写法
+                    //  $query(key) -> find key in page query -> get + 注册
                     const scope = {
                         getObserveValue: this.getObserveValue,
                         appScope: this.appRoot.appScopes,
@@ -298,9 +299,18 @@ export class ComponentConfig implements IComponentConfig {
                             } else {
                                 console.warn("Do you know what you do?")
                             }
-
                         },
+                        $query: (key: string) => {
+                            if (key in this.pageRoot.query) {
+                                const q = this.pageRoot.query[key]
+                                // TODO: 没能实现
+                                //    return q.rxResult.res(this.forcesToUpdate)
+                                return q.result
+                            }
+                            return undefined
+                        }
                     }
+
                     const fn = getJSExpressionHander(action, scope)
 
 

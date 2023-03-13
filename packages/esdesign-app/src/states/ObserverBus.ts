@@ -57,13 +57,12 @@ export default new Proxy({
     // 这是一个proxy的容器,
     // 里面的数据都会被自动转成可监听数据
     dep: new ObserverBus(),
-    // btn1:"sdfsdf"
 } as IObsevableObject, {
 
     // 添加监听
     get: function (target, key: string) {
 
-        console.log("进入了get！！", key);
+        // console.log("进入了get！！", key);
         const _self = target
         return function (fn: Function) {
 
@@ -81,7 +80,7 @@ export default new Proxy({
     // 发布监听
     set: function (target, key: string, value) {
 
-        console.log("SET!", key, value, target);
+        // console.log("SET!", key, value, target);
 
 
         if (['dep'].includes(key)) {

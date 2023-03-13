@@ -1,15 +1,13 @@
 # 正在实现
  - ### 优先级高
 
+  - page parameters 获取 共享
 
   - 实现 query + elemet 双向数据 获取、监听
 
-
-  - page parameters 获取 共享
-
   - 组件之间的dep实现
-
   - 实现 scope 获取逻辑
+
 
   - 实现事件路由跳转
 
@@ -41,6 +39,8 @@
 
 
      - 问题，为什么不把customCompoent 转换成 Component？
+
+     - 目前有了app scope ，是否还需要实现 page scope ？ - 需要！！！
 
 
 # 正在排期
