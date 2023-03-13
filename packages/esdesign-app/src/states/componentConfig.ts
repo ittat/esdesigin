@@ -277,6 +277,7 @@ export class ComponentConfig implements IComponentConfig {
                     //  glabal scope
                     //  $scope 是 为了更加方便获取get states的写法
                     //  $query(key) -> find key in page query -> get + 注册
+                    //  $params: $params.get(key)
                     const scope = {
                         getObserveValue: this.getObserveValue,
                         appScope: this.appRoot.appScopes,
@@ -308,7 +309,8 @@ export class ComponentConfig implements IComponentConfig {
                                 return q.result
                             }
                             return undefined
-                        }
+                        },
+                        $params: new URLSearchParams(window.location.search.split('?')[1])
                     }
 
                     const fn = getJSExpressionHander(action, scope)

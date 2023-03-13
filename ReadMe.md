@@ -1,7 +1,6 @@
 # 正在实现
  - ### 优先级高
 
-  - page parameters 获取 共享
 
   - 实现 query + elemet 双向数据 获取、监听
 
@@ -16,8 +15,6 @@
 
   - CustomComponent 的依赖引入问题
       - mui 样式问题 - ?
-
-
 
 
 
@@ -112,3 +109,5 @@ Slot 组件适配
 
 2023-03-13
   - feature: 实现 scope 和 elemet 之间的获取、监听更新(使用Proxy+ Event)
+  - feature: 实现 element 获取 query(不是响应式的)
+  - feature: 实现 element 获取 page parameters
