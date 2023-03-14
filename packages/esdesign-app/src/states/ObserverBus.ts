@@ -1,3 +1,5 @@
+import { RecordStr } from "../types";
+
 class ObserverBus {
 
     // TODO : 这里应该有一个最大值
@@ -53,56 +55,63 @@ interface IObsevableObject {
     [s: string]: any
 }
 
-export default new Proxy({
-    // 这是一个proxy的容器,
-    // 里面的数据都会被自动转成可监听数据
-    dep: new ObserverBus(),
-} as IObsevableObject, {
-
-    // 添加监听
-    get: function (target, key: string) {
-
-        // console.log("进入了get！！", key);
-        const _self = target
-        return function (fn: Function) {
 
 
-            if (['$$typeof', 'dep'].includes(key)) {
-                console.warn(key, ": 这个属性不可以监听哦");
+export default function initObsevableObject(initObj:RecordStr = {}){
+
+    return new Proxy({
+        // 这是一个proxy的容器,
+        // 里面的数据都会被自动转成可监听数据
+        dep: new ObserverBus(),
+        test_data: "test",
+        ...initObj
+    } as IObsevableObject, {
+
+        // 添加监听
+        get: function (target, key: string) {
+
+            // console.log("进入了get！！", key);
+            const _self = target
+            return function (fn: Function) {
+
+                if (['$$typeof', 'dep'].includes(key)) {
+                    console.warn(key, ": 这个属性不可以监听哦");
+                    return undefined
+                } else {
+                    typeof fn == 'function' && _self.dep.on(key, fn)
+                }
+
+                return target?.[key]
+            }
+        },
+
+        // 发布监听
+        set: function (target, key: string, value) {
+
+            // console.log("SET!", key, value, target);
+
+
+            if (['dep'].includes(key)) {
+                console.warn(key, ": 这个属性不可以写");
+                return
             } else {
-                _self.dep.on(key, fn)
+
+                // 如果是复杂类型,这里只是ref引用判断,也就是浅比较
+                if (key in target && target[key] == value) {
+                    // 不更新
+                    console.log("不更新");
+                } else {
+                    console.log("发布更新");
+
+                    target.dep.notify(key, value)
+                    // 对于满足条件的 age 属性以及其他属性，直接保存
+                    target[key] = value;
+                }
+
             }
 
-            return target?.[key]
+            return value
         }
-    },
+    })
 
-    // 发布监听
-    set: function (target, key: string, value) {
-
-        // console.log("SET!", key, value, target);
-
-
-        if (['dep'].includes(key)) {
-            console.warn(key, ": 这个属性不可以写");
-            return
-        } else {
-
-            // 如果是复杂类型,这里只是ref引用判断,也就是浅比较
-            if (key in target && target[key] == value) {
-                // 不更新
-                console.log("不更新");
-            } else {
-                console.log("发布更新");
-
-                target.dep.notify(key, value)
-                // 对于满足条件的 age 属性以及其他属性，直接保存
-                target[key] = value;
-
-            }
-
-        }
-
-        return value
-    }
-})
+}

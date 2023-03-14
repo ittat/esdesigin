@@ -13,6 +13,7 @@ import { RectangleEdge, RECTANGLE_SLOT_CENTER } from "../PageEditor/DetectOverla
 import _ from "lodash"
 import AppConfig from "./appConfig"
 import QueryConfig from "./queryConfig"
+import initObsevableObject from "./ObserverBus"
 
 
 
@@ -28,7 +29,13 @@ export default class PageConfig implements IPageConfig {
     appRoot: AppConfig
 
 
-    scope: RecordStr<any> = {}
+    scope: RecordStr<any> = initObsevableObject({
+        pageanem:"sdsdsfssdsd4df"
+    });
+
+
+    globelScope: RecordStr<any>
+
 
 
 
@@ -86,9 +93,10 @@ export default class PageConfig implements IPageConfig {
         this.pageName = config.pageName
         this.appRoot = appConfig
 
-        if (config.scope) {
-            this.scope = config.scope
-        }
+        // TODO
+        // if (config.scope) {
+        //     this.scope = config.scope
+        // }
 
         if (!config.id) {
             this.id = getUUID()
@@ -96,7 +104,7 @@ export default class PageConfig implements IPageConfig {
             this.id = config.id
         }
 
-        // this.domTree 
+        // this.domTree
         Object.entries(config.domTree).forEach(([id, node]) => {
             if (CustomComponentConfig.IsCustomComponentConfigType(node)) {
                 this.domTree[id] = new CustomComponentConfig({ config: node, parentId: this.id, appRoot: this.appRoot, pageRoot: this })
@@ -181,21 +189,21 @@ export default class PageConfig implements IPageConfig {
 
 
 
-        // todo: 
+        // todo:
 
         this.appRoot.event.dispatch('page.query.update', {})
     }
 
+    // TODO
+    // getScope() {
+    //     const scope = Object.assign({}, this.scope)
+    //     // state
 
-    getScope() {
-        const scope = Object.assign({}, this.scope)
-        // state
+    //     // query
+    //     scope.query = this.query
+    //     // params
 
-        // query
-        scope.query = this.query
-        // params
-
-    }
+    // }
 
     pageInit() {
         // parameters
@@ -382,7 +390,7 @@ export default class PageConfig implements IPageConfig {
 
                     }
 
-                    // 将 pageSolt parent 
+                    // 将 pageSolt parent
 
                     pageSolt && overNodeParent.addOrMoveNode(pageSolt, overNodeIndex)
                 }

@@ -1,53 +1,54 @@
 # 正在实现
  - ### 优先级高
 
+  - 实现 page scope 和 对应 ui
+    - 下次任务：
+        只是page/root单向对应ui，ui保存回scope没有实现
+          1. 实现i保存回scope没有实现
+          2. pageconfig 的scope 没有测试依赖收集功能是否正常
+          3. pageconfig 关于 scope 初始化 todo
+          4. element 可以获取 pagescope
+          5. 实现 element 可以查看当前的scope
 
-  - 实现 query + elemet 双向数据 获取、监听
-
-  - 组件之间的dep实现
-  - 实现 scope 获取逻辑
-
+  - 实现 query 和 其他element的props 的 响应式(可以属于同一个方法)
 
   - 实现事件路由跳转
 
-  - 实现props按照情况自动改变
+  - 实现props按照情况自动改变 (??)
 
 
-  - CustomComponent 的依赖引入问题
-      - mui 样式问题 - ?
+  - dom tree 查看
 
+  - 完善 Setter Panel
+
+  - Editor 插件性能问题
+
+  - save to loaction
 
 
  - ### 优先级低
 
-
   - 实现事件输入参数
-
-    - dom tree 查看
-
-
-   - 完善 Setter Panel
-   - CustomComponent 编辑界面 异常处理
-   - AppsOverView 完善
-
-
+  - CustomComponent 的依赖引入问题
+      - mui 样式问题 - ?
+  - CustomComponent 编辑界面 异常处理
+  - AppsOverView 完善
 
  - ### 逻辑问题
 
 
      - 问题，为什么不把customCompoent 转换成 Component？
 
-     - 目前有了app scope ，是否还需要实现 page scope ？ - 需要！！！
+
 
 
 # 正在排期
 
   - component List 不在左侧显示（改成在底部抽屉）
   - 快捷按钮功能
-  - Editor 插件性能问题
+
   - Left panel UI
   - 实现 grid 组件
-  - save to loaction
 
 
 
@@ -111,3 +112,8 @@ Slot 组件适配
   - feature: 实现 scope 和 elemet 之间的获取、监听更新(使用Proxy+ Event)
   - feature: 实现 element 获取 query(不是响应式的)
   - feature: 实现 element 获取 page parameters
+  - feature: 实现 element 获取 当前page的其他element的props
+
+
+2023-03-14
+  - feature: 实现 page/root scope 和 对应 ui (只是page/root单向对应ui，ui保存回scope没有实现)

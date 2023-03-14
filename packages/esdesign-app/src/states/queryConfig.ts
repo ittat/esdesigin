@@ -29,6 +29,37 @@ export default class QueryConfig<T = API_NAMES> implements IQueryConfig<API_NAME
     errorData?: any
 
 
+    // 对外接口，
+    // rxResult: any = new Proxy({
+    //     res: this.result,
+    //     // 收集这个查询数据的依赖者fn回调
+    //     dep: new Set<Function>()
+
+    // }, {
+    //     get: function (target) {
+    //         console.warn("!!!!!!!!!!!!!!!!!!!!!!!",target);
+    //         return function (fn: Function) {
+
+    //             console.warn("!!!!!!!!!!!!!!!!!!!!!!!",target,fn);
+
+    //             if (!target.dep.has(fn)) {
+    //                 target.dep.add(fn)
+    //             }
+    //             return target.res
+    //         }
+    //     },
+    //     set: function (target,key,value) {
+    //         console.warn("rxResult can set !!!",target,key);
+
+    //         console.log(target.dep);
+
+    //         target['res'] = value
+
+    //         return false
+    //     },
+    // })
+
+
     //  -1 出错
     //  0 为fetch
     // 1 得到数据
@@ -198,6 +229,8 @@ export default class QueryConfig<T = API_NAMES> implements IQueryConfig<API_NAME
 
             if (res) {
                 this.result = res
+
+                // this.rxResult.res = res
             }
 
         }

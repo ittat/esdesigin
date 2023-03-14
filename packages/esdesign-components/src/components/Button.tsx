@@ -29,7 +29,8 @@ export default createBuiltInComponent('Button', Button, '', {
     action:{
       type:'JSExpression',
       // value:'$scope("btn1")'
-      value:'$query("23r2r-23r2r3r-23rr-23r23-23r32")'
+      // value:'$query("23r2r-23r2r3r-23rr-23r23-23r32")'
+      value:'$params.get("test123")'
     }
   },
   variant: {
@@ -41,8 +42,8 @@ export default createBuiltInComponent('Button', Button, '', {
     type: 'event',
     action:{
       type:'JSExpression',
-      value:'$scope("btn1","change!")'
-      // value: 'console.log($query)'
+      // value:'$scope("btn1","change!")'
+      value: 'console.log($element("d3f-d3"))'
     }
   },
   ...MUISizeConfig,

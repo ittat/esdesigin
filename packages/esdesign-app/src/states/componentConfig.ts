@@ -235,10 +235,6 @@ export class ComponentConfig implements IComponentConfig {
         }
     }
 
-
-
-
-
     /**
      *
      * 把ArgConfig类型得props转换成key-value类型，喂给react组件
@@ -310,13 +306,19 @@ export class ComponentConfig implements IComponentConfig {
                             }
                             return undefined
                         },
-                        $params: new URLSearchParams(window.location.search.split('?')[1])
+                        $params: new URLSearchParams(window.location.search.split('?')[1]),
+                        $element: (id: string) => {
+                            return {
+                                id,
+                                // @ts-ignore - 不对这个行为负责，只是尽可能找到对应id的props
+                                props: this.pageRoot.findElementById(id)?.props ?? undefined,
+                                //  不对这个行为负责，只是尽可能找到对应id的dom
+                                dom: this.pageRoot.tryFindMyRectById(id)
+                            }
+                        }
                     }
 
                     const fn = getJSExpressionHander(action, scope)
-
-
-
 
                     if (arg.type == 'event') {
                         sum[name] = fn
@@ -338,8 +340,6 @@ export class ComponentConfig implements IComponentConfig {
         return props
 
     }
-
-
 
     static async initMaterial(config: ComponentConfig, appApi: AppConfig, materials: Record<string, IESDesiginComponent>) {
         let dom: IESDesiginComponent = materials['Error']

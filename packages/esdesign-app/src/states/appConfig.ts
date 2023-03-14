@@ -11,7 +11,7 @@ import { RectangleEdge, RECTANGLE_SLOT_CENTER } from "../PageEditor/DetectOverla
 
 import _ from "lodash"
 import PageConfig from "./pageConfig"
-import ObserverObject from "./ObserverBus"
+import initObsevableObject from "./ObserverBus"
 
 
 
@@ -31,7 +31,9 @@ export default class AppConfig implements IAppConfig {
     previewMode: boolean = false
 
 
-    appScopes: Record<string, any> = ObserverObject;
+    appScopes: Record<string, any> = initObsevableObject({
+        lalala:"sdsdsfsdf"
+    });
 
     constructor({ appConfig, materials, preview }: { appConfig: IAppConfig, materials: Record<string, IESDesiginComponent>, preview?: boolean }) {
 
