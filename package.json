@@ -1,6 +1,7 @@
 {
   "name": "esdesgin",
   "version": "0.0.1",
+  "private": "true",
   "description": "",
   "workspaces": [
     "packages/*"
@@ -19,6 +20,8 @@
     "lodash": "^4.17.21",
     "mobx": "^6.6.2",
     "mobx-react": "^7.5.3",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.21.2",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

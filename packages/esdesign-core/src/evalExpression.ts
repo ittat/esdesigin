@@ -1,4 +1,4 @@
-import { EventActionConfig, JSExpressionActionConfig } from "packages/esdesign-components/dist/types";
+import { EventActionConfig, JSExpressionActionConfig } from "@ittat/esdesign-components";
 
 // 方案一 - 备份方案
 export function getFunction(scope: any, value: string) {

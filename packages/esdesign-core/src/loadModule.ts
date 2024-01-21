@@ -53,7 +53,7 @@ async function createRequire(urlImports: string[]) {
   return require;
 }
 
-export default async function loadModule(mod: any): Promise<any> {
+export  async function loadModule(mod: any): Promise<any> {
   if (mod.error) {
     throw mod.error;
   }
